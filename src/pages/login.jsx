@@ -1,9 +1,9 @@
-import '../css/login.css'
+// import '../css/login.css'
 
-function Login() {
+export default function Login() {
 
     return (
-        <div class="font-display">
+        <div className={"font-display"}>
             <div class="relative flex h-auto min-h-screen w-full flex-col bg-gradient-to-br from-black via-[#0a140e] to-[#112117] group/design-root overflow-x-hidden">
                 <div class="layout-container flex h-full grow flex-col">
                     <div class="px-4 flex flex-1 justify-center py-5">

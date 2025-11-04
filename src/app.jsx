@@ -1,6 +1,6 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "/pages/login.jsx";
+import Login from "./pages/login.jsx";
 // import Register from "./pages/Register";
 // import Users from "./pages/Users";
 
@@ -9,8 +9,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/registro" element={<Register />} />
-        <Route path="/usuarios" element={<Users />} />
+        {/* <Route path="/registro" element={<Register />} /> */}
+        {/* <Route path="/usuarios" element={<Users />} /> */}
       </Routes>
     </Router>
   );
