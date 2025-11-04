@@ -40,7 +40,7 @@ export default function Login() {
 
                     <button className="btn-login">Iniciar Sesión</button>
 
-                    <p className="register"> ¿No tienes una cuenta? <a href="#">Regístrate</a></p>
+                    <p className="register"> ¿No tienes una cuenta? <a href="/registro">Regístrate</a></p>
                 </div>
             </div>
         </div>
