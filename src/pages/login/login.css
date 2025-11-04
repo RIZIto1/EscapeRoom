@@ -1,0 +1,23 @@
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
+
+@layer utilities {
+    @keyframes smoke {
+        0% {
+            background-position: 0 0;
+        }
+
+        100% {
+            background-position: -200% 100%;
+        }
+    }
+
+    .animate-smoke {
+        animation: smoke 40s linear infinite;
+    }
+}
