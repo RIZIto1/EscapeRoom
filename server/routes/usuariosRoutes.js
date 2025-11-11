@@ -1,17 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const usuariosController = require('../controllers/usuariosController.js');
+const { verificarToken, verificarAdmin } = require('../middleware/auth.js');
 
 /**
  * @swagger
  * tags:
  *   name: Usuarios
- *   description: Gestión de usuarios
+ *   description: Gestión de usuarios y autenticación
  */
 
 /**
  * @swagger
  * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  *   schemas:
  *     Usuario:
  *       type: object
@@ -46,35 +52,18 @@ const usuariosController = require('../controllers/usuariosController.js');
  *           description: Rol del usuario
  *       example:
  *         ID_usuarios: 1
- *         nombre: Tais
- *         apellido: Leyes
- *         telefono: "123456789"
- *         mail: "tais093@gmail.com"
- *         contrasenia: "password123"
+ *         nombre: Juan
+ *         apellido: Pérez
+ *         telefono: "1140430332"
+ *         mail: "juan@gmail.com"
  *         rol: "user"
- *
- *     Login:
- *       type: object
- *       required:
- *         - mail
- *         - contrasenia
- *       properties:
- *         mail:
- *           type: string
- *           description: Email del usuario
- *         contrasenia:
- *           type: string
- *           description: Contraseña del usuario
- *       example:
- *         mail: "tais093@gmail.com"
- *         contrasenia: "password123"
  */
 
 /**
  * @swagger
  * /usuarios:
  *   post:
- *     summary: Crea un nuevo usuario
+ *     summary: Registra un nuevo usuario
  *     tags: [Usuarios]
  *     requestBody:
  *       required: true
@@ -82,33 +71,36 @@ const usuariosController = require('../controllers/usuariosController.js');
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - nombre
+ *               - apellido
+ *               - telefono
+ *               - mail
+ *               - contrasenia
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *               apellido:
+ *                 type: string
+ *               telefono:
+ *                 type: string
+ *               mail:
+ *                 type: string
+ *               contrasenia:
+ *                 type: string
  *             example:
- *               nombre: Tais
- *               apellido: Leyes
- *               telefono: "123456789"
- *               mail: "tais093@gmail.com"
- *               contrasenia: "taisleches"
+ *               nombre: Juan
+ *               apellido: Pérez
+ *               telefono: "1140430332"
+ *               mail: "juan@gmail.com"
+ *               contrasenia: "password123"
  *     responses:
  *       201:
  *         description: Usuario creado exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 id:
- *                   type: integer
- *               example:
- *                 message: "Usuario creado"
- *                 id: 5
  *       400:
- *         description: Campos obligatorios faltantes o email inválido
+ *         description: Campos obligatorios faltantes o inválidos
  *       409:
  *         description: Email ya registrado
- *       500:
- *         description: Error en el servidor
  */
 router.post('/', usuariosController.crearUsuario);
 
@@ -116,7 +108,7 @@ router.post('/', usuariosController.crearUsuario);
  * @swagger
  * /usuarios/login:
  *   post:
- *     summary: Inicia sesión de un usuario
+ *     summary: Inicia sesión y obtiene token JWT
  *     tags: [Usuarios]
  *     requestBody:
  *       required: true
@@ -124,35 +116,91 @@ router.post('/', usuariosController.crearUsuario);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - mail
+ *               - contrasenia
+ *             properties:
+ *               mail:
+ *                 type: string
+ *               contrasenia:
+ *                 type: string
  *             example:
- *               mail: "tais093@gmail.com"
+ *               mail: "juan@gmail.com"
  *               contrasenia: "password123"
  *     responses:
  *       200:
- *         description: Login exitoso
+ *         description: Login exitoso, devuelve token
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 message:
+ *                 mensaje:
+ *                   type: string
+ *                 token:
  *                   type: string
  *                 usuario:
- *                   $ref: '#/components/schemas/Usuario'
- *       400:
- *         description: Campos obligatorios faltantes
+ *                   type: object
  *       401:
- *         description: Credenciales inválidas
- *       500:
- *         description: Error en el servidor
+ *         description: Credenciales incorrectas
  */
 router.post('/login', usuariosController.login);
+
+// /**
+//  * @swagger
+//  * /usuarios/verificar-token:
+//  *   post:
+//  *     summary: Verifica si un token JWT es válido
+//  *     tags: [Usuarios]
+//  *     requestBody:
+//  *       required: true
+//  *       content:
+//  *         application/json:
+//  *           schema:
+//  *             type: object
+//  *             required:
+//  *               - token
+//  *             properties:
+//  *               token:
+//  *                 type: string
+//  *                 description: Token JWT a verificar
+//  *             example:
+//  *               token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+//  *     responses:
+//  *       200:
+//  *         description: Token válido
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: object
+//  *               properties:
+//  *                 valido:
+//  *                   type: boolean
+//  *                   example: true
+//  *                 usuario:
+//  *                   type: object
+//  *                   description: Datos decodificados del usuario
+//  *       401:
+//  *         description: Token inválido o expirado
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: object
+//  *               properties:
+//  *                 valido:
+//  *                   type: boolean
+//  *                   example: false
+//  *                 error:
+//  *                   type: string
+//  *                   example: "Token inválido o expirado"
+//  */
+// router.post('/verificar-token', usuariosController.verificarToken);
 
 /**
  * @swagger
  * /usuarios/getall:
  *   get:
- *     summary: Obtiene todos los usuarios
+ *     summary: Obtiene todos los usuarios (sin contraseñas)
  *     tags: [Usuarios]
  *     responses:
  *       200:
@@ -163,17 +211,47 @@ router.post('/login', usuariosController.login);
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Usuario'
- *       500:
- *         description: Error en el servidor
  */
 router.get('/getall', usuariosController.getAllUsuarios);
 
 /**
  * @swagger
+ * /usuarios/{mail}:
+ *   get:
+ *     summary: Obtiene un usuario por su email (requiere autenticación)
+ *     tags: [Usuarios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: mail
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Email del usuario
+ *         example: "juan@gmail.com"
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Usuario'
+ *       401:
+ *         description: Token no proporcionado o inválido
+ *       404:
+ *         description: Usuario no encontrado
+ */
+router.get('/:mail', verificarToken, usuariosController.getUsuarioByEmail);
+
+/**
+ * @swagger
  * /usuarios/rol/{id}:
  *   put:
- *     summary: Promueve un usuario a admin
+ *     summary: Promueve un usuario a admin (solo administradores)
  *     tags: [Usuarios]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -184,28 +262,21 @@ router.get('/getall', usuariosController.getAllUsuarios);
  *     responses:
  *       200:
  *         description: Usuario promovido a admin
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *               example:
- *                 message: "Usuario promovido a admin"
+ *       403:
+ *         description: No autorizado, solo administradores
  *       404:
  *         description: Usuario no encontrado
- *       500:
- *         description: Error en el servidor
  */
-router.put('/rol/:id', usuariosController.promoverUsuario);
+router.put('/rol/:id', verificarToken, verificarAdmin, usuariosController.promoverUsuario);
 
 /**
  * @swagger
  * /usuarios/delete/{id}:
  *   delete:
- *     summary: Elimina un usuario por ID
+ *     summary: Elimina un usuario por ID (solo administradores)
  *     tags: [Usuarios]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -216,20 +287,11 @@ router.put('/rol/:id', usuariosController.promoverUsuario);
  *     responses:
  *       200:
  *         description: Usuario eliminado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *               example:
- *                 message: "Usuario eliminado"
+ *       403:
+ *         description: No autorizado, solo administradores
  *       404:
  *         description: Usuario no encontrado
- *       500:
- *         description: Error en el servidor
  */
-router.delete('/delete/:id', usuariosController.deleteUsuario);
+router.delete('/delete/:id', verificarToken, verificarAdmin, usuariosController.deleteUsuario);
 
 module.exports = router;

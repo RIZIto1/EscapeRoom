@@ -1,0 +1,341 @@
+.home-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0a0f0d 0%, #1a2520 100%);
+    color: #ffffff;
+}
+
+/* Header */
+.home-header {
+    background: rgba(17, 33, 23, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(54, 226, 123, 0.2);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.home-header h1 {
+    font-size: 1.8rem;
+    margin: 0;
+    color: #36e27b;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-name {
+    font-size: 0.95rem;
+}
+
+.user-name strong {
+    color: #36e27b;
+}
+
+.badge-admin {
+    background: linear-gradient(135deg, #36e27b, #2ab866);
+    color: #0a0f0d;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.btn-logout {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.btn-logout:hover {
+    background: rgba(232, 74, 95, 0.2);
+    border-color: #e84a5f;
+    color: #e84a5f;
+}
+
+/* Main Content */
+.home-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+.intro-section {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.intro-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #36e27b, #2ab866);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.intro-section p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Carrusel */
+.carousel-container {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+}
+
+.carousel-btn {
+    background: rgba(54, 226, 123, 0.1);
+    border: 1px solid rgba(54, 226, 123, 0.3);
+    color: #36e27b;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.carousel-btn:hover:not(:disabled) {
+    background: rgba(54, 226, 123, 0.2);
+    border-color: #36e27b;
+    transform: scale(1.1);
+}
+
+.carousel-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.carousel-btn .material-symbols-outlined {
+    font-size: 2rem;
+}
+
+.carousel-content {
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Sala Card */
+.sala-card {
+    background: rgba(17, 33, 23, 0.6);
+    border: 1px solid rgba(54, 226, 123, 0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.sala-card:hover {
+    border-color: rgba(54, 226, 123, 0.5);
+    box-shadow: 0 8px 32px rgba(54, 226, 123, 0.15);
+}
+
+.sala-image {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+}
+
+.sala-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.sala-card:hover .sala-image img {
+    transform: scale(1.05);
+}
+
+.sala-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(10, 15, 13, 0.95), transparent);
+    padding: 2rem;
+}
+
+.sala-overlay h3 {
+    font-size: 2rem;
+    margin: 0;
+    color: #36e27b;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Detalles */
+.sala-details {
+    padding: 2rem;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    background: rgba(54, 226, 123, 0.05);
+    border: 1px solid rgba(54, 226, 123, 0.1);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.detail-item .material-symbols-outlined {
+    color: #36e27b;
+    font-size: 1.5rem;
+}
+
+.detail-item.price {
+    background: rgba(54, 226, 123, 0.1);
+    border-color: rgba(54, 226, 123, 0.3);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.btn-reservar {
+    width: 100%;
+    background: linear-gradient(135deg, #36e27b, #2ab866);
+    color: #0a0f0d;
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-reservar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(54, 226, 123, 0.3);
+}
+
+/* Indicadores */
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.indicator.active {
+    background: #36e27b;
+    width: 30px;
+    border-radius: 5px;
+}
+
+/* Loading */
+.home-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0a0f0d 0%, #1a2520 100%);
+    color: #ffffff;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(54, 226, 123, 0.1);
+    border-top-color: #36e27b;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.home-loading p {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.no-salas {
+    text-align: center;
+    padding: 3rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .home-header {
+        padding: 1rem;
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .home-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .carousel-container {
+        gap: 1rem;
+    }
+
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .sala-image {
+        height: 300px;
+    }
+
+    .sala-overlay h3 {
+        font-size: 1.5rem;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .intro-section h2 {
+        font-size: 2rem;
+    }
+}

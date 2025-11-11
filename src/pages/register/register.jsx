@@ -1,14 +1,17 @@
-import './login.css';
+import './register.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-export default function Login() {
+export default function Register() {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
-
+    
     const [form, setForm] = useState({
+        nombre: '',
+        apellido: '',
+        telefono: '',
         mail: '',
         contrasenia: ''
     });
@@ -23,7 +26,7 @@ export default function Login() {
 
     const showLoadingAlert = () => {
         Swal.fire({
-            title: 'Iniciando sesión...',
+            title: 'Registrando...',
             background: '#112117',
             color: '#ffffff',
             didOpen: () => {
@@ -36,7 +39,7 @@ export default function Login() {
 
     // Envía el formulario
     const handleSubmit = async () => {
-        if (!form.mail || !form.contrasenia) {
+        if (!form.nombre || !form.apellido || !form.telefono || !form.mail || !form.contrasenia) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Campos incompletos',
@@ -49,11 +52,39 @@ export default function Login() {
             return;
         }
 
+        if (form.contrasenia.length < 6) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Contraseña débil',
+                text: 'La contraseña debe tener al menos 6 caracteres',
+                background: '#112117',
+                color: '#ffffff',
+                confirmButtonColor: '#36e27b',
+                iconColor: '#f59e0b'
+            });
+            return;
+        }
+
+        // Validación de email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(form.mail)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Email inválido',
+                text: 'Por favor ingresa un correo electrónico válido',
+                background: '#112117',
+                color: '#ffffff',
+                confirmButtonColor: '#36e27b',
+                iconColor: '#e84a5f'
+            });
+            return;
+        }
+
         setLoading(true);
         showLoadingAlert();
 
         try {
-            const response = await fetch('http://localhost:3000/usuarios/login', {
+            const response = await fetch('http://localhost:3000/usuarios', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form)
@@ -62,15 +93,11 @@ export default function Login() {
             const data = await response.json();
 
             if (response.ok) {
-                // Login exitoso
-                // Guardar token y datos del usuario en localStorage
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('usuario', JSON.stringify(data.usuario));
-
+                // Registro exitoso
                 await Swal.fire({
                     icon: 'success',
-                    title: '¡Bienvenido!',
-                    text: `Hola ${data.usuario.nombre}`,
+                    title: '¡Registro exitoso!',
+                    text: 'Tu cuenta ha sido creada correctamente',
                     background: '#112117',
                     color: '#ffffff',
                     confirmButtonColor: '#36e27b',
@@ -78,19 +105,14 @@ export default function Login() {
                     timer: 2000,
                     timerProgressBar: true
                 });
-
-                // Redirigir según el rol del usuario
-                if (data.usuario.rol === 'admin') {
-                    navigate('/inicio'); 
-                } else {
-                    navigate('/inicio');
-                }
+                
+                navigate('/');
             } else {
                 // Error del servidor
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al iniciar sesión',
-                    text: data.error || 'Credenciales incorrectas',
+                    title: 'Error al registrar',
+                    text: data.error || 'Ocurrió un error. Intenta nuevamente.',
                     background: '#112117',
                     color: '#ffffff',
                     confirmButtonColor: '#36e27b',
@@ -112,78 +134,100 @@ export default function Login() {
         }
     };
 
-
-
-export default function Login() {
-    const [showPassword, setShowPassword] = useState(false);
-
     return (
-        <div className="login-page">
+        <div className="register-page">
             <div className="background">
                 <div className="smoke"></div>
             </div>
 
-            <div className="login-container">
-                <div className="login-header">
+            <div className="register-container">
+                <div className="register-header">
                     <div className="icon-box">
-                        <span className="material-symbols-outlined">key</span>
+                        <span className="material-symbols-outlined">person_add</span>
                     </div>
-                    <h1>Iniciar Sesión</h1>
+                    <h1>Crear Cuenta</h1>
                 </div>
 
-                <div className="login-form">
+                <div className="register-form">
+                    <label>
+                        <p>Nombre</p>
+                        <input 
+                            type="text" 
+                            name="nombre"
+                            value={form.nombre}
+                            onChange={handleChange}
+                            placeholder="Juan"
+                            disabled={loading}
+                        />
+                    </label>
+
+                    <label>
+                        <p>Apellido</p>
+                        <input 
+                            type="text" 
+                            name="apellido"
+                            value={form.apellido}
+                            onChange={handleChange}
+                            placeholder="Pérez"
+                            disabled={loading}
+                        />
+                    </label>
+
+                    <label>
+                        <p>Teléfono</p>
+                        <input 
+                            type="tel" 
+                            name="telefono"
+                            value={form.telefono}
+                            onChange={handleChange}
+                            placeholder="1140430332"
+                            disabled={loading}
+                        />
+                    </label>
+
                     <label>
                         <p>Correo Electrónico</p>
-                        <input
-                            type="email"
+                        <input 
+                            type="email" 
                             name="mail"
                             value={form.mail}
                             onChange={handleChange}
                             placeholder="tu@email.com"
                             disabled={loading}
                         />
-                        <p>Usuario o Correo Electrónico</p>
-                        <input type="text" placeholder="Introduce tu usuario o correo electrónico"/>
                     </label>
 
                     <label>
                         <p>Contraseña</p>
                         <div className="password-wrapper">
-                            <input
+                            <input 
                                 type={showPassword ? 'text' : 'password'}
                                 name="contrasenia"
                                 value={form.contrasenia}
                                 onChange={handleChange}
-                                placeholder="Introduce tu contraseña"
+                                placeholder="Mínimo 6 caracteres"
                                 disabled={loading}
                             />
-                            <span
-                                className="material-symbols-outlined toggle-password"
+                            <span 
+                                className="material-symbols-outlined toggle-password" 
                                 onClick={() => setShowPassword(!showPassword)}
                             >
-                            <input type={showPassword ? 'text' : 'password'} placeholder="Introduce tu contraseña"/>
-                            <span className="material-symbols-outlined toggle-password" onClick={() => setShowPassword(!showPassword)}>
                                 {showPassword ? 'visibility_off' : 'visibility'}
                             </span>
                         </div>
                     </label>
 
-                    <p className="forgot">¿Olvidaste tu contraseña?</p>
-
-                    <button
+                    <button 
                         onClick={handleSubmit}
-                        className="btn-login"
+                        className="btn-register"
                         disabled={loading}
                     >
-                        Iniciar Sesión
+                        Registrarse
                     </button>
 
-                    <p className="register">
-                        ¿No tienes una cuenta? <a href="/registro">Regístrate</a>
+                    <p className="login"> 
+                        ¿Ya tienes una cuenta? <a href="/">Inicia sesión</a>
                     </p>
-                    <button className="btn-login">Iniciar Sesión</button>
-
-                    <p className="register"> ¿No tienes una cuenta? <a href="#">Regístrate</a></p>
                 </div>
             </div>
         </div>

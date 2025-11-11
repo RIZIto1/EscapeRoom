@@ -1,0 +1,294 @@
+@import url('https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+
+/* ===== Variables globales ===== */
+:root {
+    --color-primary: #36e27b;
+    --color-bg-dark: #112117;
+    --color-bg-mid: #0a140e;
+    --color-bg-light: #f6f8f7;
+    --color-input-bg: #29382f;
+    --color-text: #ffffff;
+    --color-text-muted: #9eb7a8;
+    --font-display: 'Spline Sans', sans-serif;
+}
+
+/* ===== General ===== */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-display);
+    background: var(--color-bg-dark);
+    color: var(--color-text);
+    height: 100%;
+}
+
+/* ===== Fondo ===== */
+.register-page {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(to bottom right, #000, var(--color-bg-mid), var(--color-bg-dark));
+}
+
+.background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.background::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url('https://images.unsplash.com/photo-1534204990973-19a95f903736?q=80&w=1974&auto=format&fit=crop') center/cover no-repeat;
+    opacity: 0.1;
+}
+
+.smoke {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(20,83,45,0.4), transparent),
+                radial-gradient(ellipse 80% 80% at 50% 120%, rgba(34,197,94,0.15), transparent);
+    background-size: 200% 200%;
+    animation: smoke 40s linear infinite;
+}
+
+@keyframes smoke {
+    0% { background-position: 0 0; }
+    100% { background-position: -200% 100%; }
+}
+
+/* ===== Contenedor ===== */
+.register-container {
+    position: relative;
+    z-index: 10;
+    background: transparent;
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 600px;
+}
+
+/* ===== Header ===== */
+.register-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.icon-box {
+    background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    margin: 0 auto 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-box span {
+    color: var(--color-primary);
+    font-size: 36px;
+}
+
+.register-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+/* ===== Mensajes (no se usan con SweetAlert pero por si acaso) ===== */
+.message {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.message.success {
+    background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+}
+
+.message.error {
+    background: color-mix(in srgb, #e84a5f 15%, transparent);
+    border: 1px solid #e84a5f;
+    color: #e84a5f;
+}
+
+/* ===== Formulario ===== */
+.register-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.register-form label {
+    display: block;
+}
+
+/* Nombre y Apellido en dos columnas */
+.register-form label:nth-child(1),
+.register-form label:nth-child(2) {
+    grid-column: span 1;
+}
+
+/* Teléfono, Email y Contraseña a ancho completo */
+.register-form label:nth-child(3),
+.register-form label:nth-child(4),
+.register-form label:nth-child(5) {
+    grid-column: span 2;
+}
+
+.register-form p {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--color-text);
+}
+
+.register-form input {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: var(--color-input-bg);
+    color: var(--color-text);
+    font-size: 15px;
+    outline: none;
+    font-family: var(--font-display);
+}
+
+.register-form input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.register-form input:focus {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 30%, #1e8a49);
+    transition: box-shadow 0.2s ease;
+}
+
+.register-form input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ===== Contraseña ===== */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    grid-column: span 2;
+}
+
+.password-wrapper input {
+    padding-right: 50px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.toggle-password:hover {
+    color: var(--color-primary);
+}
+
+/* ===== Botón ===== */
+.btn-register {
+    grid-column: span 2;
+    width: 100%;
+    background: var(--color-primary);
+    color: var(--color-bg-dark);
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    padding: 14px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    font-family: var(--font-display);
+}
+
+.btn-register:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+.btn-register:focus {
+    outline: none;
+}
+
+.btn-register:active:not(:disabled) {
+    transform: scale(0.99);
+}
+
+.btn-register:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ===== Enlaces ===== */
+.login {
+    grid-column: span 2;
+    text-align: center;
+    font-size: 15px;
+    color: var(--color-text-muted);
+    margin-top: 10px;
+}
+
+.login a {
+    color: var(--color-primary);
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.login a:hover {
+    opacity: 0.8;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+    .register-container {
+        padding: 30px 20px;
+        max-width: 95%;
+    }
+
+    .register-form {
+        grid-template-columns: 1fr;
+    }
+
+    .register-form label:nth-child(1),
+    .register-form label:nth-child(2),
+    .register-form label:nth-child(3),
+    .register-form label:nth-child(4),
+    .register-form label:nth-child(5) {
+        grid-column: span 1;
+    }
+
+    .password-wrapper {
+        grid-column: span 1;
+    }
+
+    .btn-register,
+    .login {
+        grid-column: span 1;
+    }
+
+    .register-header h1 {
+        font-size: 26px;
+    }
+}
