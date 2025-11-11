@@ -7,11 +7,13 @@ export default function Login() {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+
     const [form, setForm] = useState({
         mail: '',
         contrasenia: ''
     });
 
+    // Actualiza el formulario cuando escribe el usuario
     const handleChange = (e) => {
         setForm({
             ...form,
@@ -32,6 +34,7 @@ export default function Login() {
         });
     };
 
+    // Envía el formulario
     const handleSubmit = async () => {
         if (!form.mail || !form.contrasenia) {
             Swal.fire({
@@ -59,6 +62,8 @@ export default function Login() {
             const data = await response.json();
 
             if (response.ok) {
+                // Login exitoso
+                // Guardar token y datos del usuario en localStorage
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('usuario', JSON.stringify(data.usuario));
 
@@ -74,8 +79,14 @@ export default function Login() {
                     timerProgressBar: true
                 });
 
-                navigate('/inicio');
+                // Redirigir según el rol del usuario
+                if (data.usuario.rol === 'admin') {
+                    navigate('/inicio'); 
+                } else {
+                    navigate('/inicio');
+                }
             } else {
+                // Error del servidor
                 Swal.fire({
                     icon: 'error',
                     title: 'Error al iniciar sesión',
@@ -117,15 +128,17 @@ export default function Login() {
 
                 <div className="login-form">
                     <label>
-                        <p>Correo electrónico</p>
+                        <p>Correo Electrónico</p>
                         <input
                             type="email"
                             name="mail"
                             value={form.mail}
                             onChange={handleChange}
-                            placeholder="Introduce tu correo electrónico"
+                            placeholder="tu@email.com"
                             disabled={loading}
                         />
+                        <p>Usuario o Correo Electrónico</p>
+                        <input type="text" placeholder="Introduce tu usuario o correo electrónico"/>
                     </label>
 
                     <label>
@@ -142,7 +155,9 @@ export default function Login() {
                             <span
                                 className="material-symbols-outlined toggle-password"
                                 onClick={() => setShowPassword(!showPassword)}
-                            >
+                            ></span>
+                            <input type={showPassword ? 'text' : 'password'} placeholder="Introduce tu contraseña"/>
+                            <span className="material-symbols-outlined toggle-password" onClick={() => setShowPassword(!showPassword)}>
                                 {showPassword ? 'visibility_off' : 'visibility'}
                             </span>
                         </div>
@@ -161,6 +176,9 @@ export default function Login() {
                     <p className="register">
                         ¿No tienes una cuenta? <a href="/registro">Regístrate</a>
                     </p>
+                    <button className="btn-login">Iniciar Sesión</button>
+
+                    <p className="register"> ¿No tienes una cuenta? <a href="#">Regístrate</a></p>
                 </div>
             </div>
         </div>
