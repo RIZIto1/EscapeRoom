@@ -1,5 +1,5 @@
 import './home.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
@@ -7,6 +7,8 @@ export default function Home() {
     const [salas, setSalas] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef(null);
     const usuario = JSON.parse(localStorage.getItem('usuario'));
 
     useEffect(() => {
@@ -15,7 +17,6 @@ export default function Home() {
 
     const cargarSalas = async () => {
         try {
-            // Usar tu endpoint /salas/getall
             const response = await fetch('http://localhost:3000/salas/getall');
             const data = await response.json();
             setSalas(data);
@@ -35,11 +36,25 @@ export default function Home() {
         setCurrentIndex((prev) => (prev - 1 + salas.length) % salas.length);
     };
 
+
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('usuario');
         navigate('/');
+        setMenuOpen(false);
     };
+    
+    // Cerrar menú al hacer clic fuera
+    useEffect(() => {
+        if (!menuOpen) return;
+        function handleClickOutside(event) {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setMenuOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [menuOpen]);
 
     if (loading) {
         return (
@@ -50,13 +65,15 @@ export default function Home() {
         );
     }
 
+    
+
     return (
         <div className="home-page">
             {/* Header */}
             <header className="home-header">
                 <div className="header-content">
                     <h1>Club Escape</h1>
-                    <div className="user-info">
+                    <div className="user-info" style={{position:'relative'}}>
                         <span className="user-name">
                             Hola, <strong>{usuario?.nombre}</strong>
                         </span>
@@ -66,7 +83,23 @@ export default function Home() {
                         <button onClick={handleLogout} className="btn-logout">
                             Cerrar Sesión
                         </button>
-                        <button className='btn-menu'><img className="img-menu" src='/images/menu.png'></img></button>
+                        {/* Botón menú hamburguesa */}
+                        <button className='btn-menu' style={{background:'none',border:'none',cursor:'pointer',marginLeft:'10px'}} onClick={()=>setMenuOpen((v)=>!v)}>
+                            <img className="img-menu" src='/images/menu.png' alt="Menú" style={{width:'32px',height:'32px'}} />
+                        </button>
+                        {/* Menú desplegable */}
+                        {menuOpen && (
+                            <ul className='list-menu' ref={menuRef} style={{position:'absolute',top:'48px',right:0,background:'#112117',color:'#fff',boxShadow:'0 2px 8px rgba(0,0,0,0.15)',borderRadius:'8px',padding:'16px 0',minWidth:'160px',zIndex:100}}>
+                                {usuario?.rol === 'admin' && (
+                                    <li style={{padding:'8px 24px',cursor:'pointer'}} onClick={()=>{navigate('/admin');setMenuOpen(false);}}>Panel Admin</li>
+                                )}
+                                {usuario?.rol === 'usuario' && <>
+                                    <li style={{padding:'8px 24px',cursor:'pointer'}} onClick={()=>{navigate('/reservar');setMenuOpen(false);}}>Reservar</li>
+                                    <li style={{padding:'8px 24px',cursor:'pointer'}} onClick={()=>{navigate('/mis-reservas');setMenuOpen(false);}}>Mis Reservas</li>
+                                </>}
+                                <li style={{padding:'8px 24px',cursor:'pointer',color:'#e84a5f'}} onClick={handleLogout}>Cerrar Sesión</li>
+                            </ul>
+                        )}
                     </div>
                 </div>
             </header>
