@@ -66,6 +66,7 @@ export default function Home() {
                         <button onClick={handleLogout} className="btn-logout">
                             Cerrar Sesión
                         </button>
+                        <button className='btn-menu'><img className="img-menu" src='/images/menu.png'></img></button>
                     </div>
                 </div>
             </header>
