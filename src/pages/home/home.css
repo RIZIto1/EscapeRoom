@@ -29,6 +29,29 @@
     color: #36e27b;
 }
 
+.img-menu {
+    width: 30px;
+    height: 30px;
+}
+
+.btn-menu {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn-menu:hover .img-menu {
+    transform: scale(1.1);
+}
+
+.img-menu:focus ,
+.btn-menu:focus {
+    border: none !important;
+    outline: none !important;
+
+}
+
 .user-info {
     display: flex;
     align-items: center;
