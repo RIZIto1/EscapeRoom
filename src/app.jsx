@@ -1,6 +1,7 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/login/login.jsx";
+
 import Register from "./pages/register/register.jsx";
 import Inicio from "./pages/home/home.jsx";
 

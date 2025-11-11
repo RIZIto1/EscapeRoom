@@ -112,6 +112,11 @@ export default function Login() {
         }
     };
 
+
+
+export default function Login() {
+    const [showPassword, setShowPassword] = useState(false);
+
     return (
         <div className="login-page">
             <div className="background">
@@ -137,6 +142,8 @@ export default function Login() {
                             placeholder="tu@email.com"
                             disabled={loading}
                         />
+                        <p>Usuario o Correo Electrónico</p>
+                        <input type="text" placeholder="Introduce tu usuario o correo electrónico"/>
                     </label>
 
                     <label>
@@ -154,6 +161,8 @@ export default function Login() {
                                 className="material-symbols-outlined toggle-password"
                                 onClick={() => setShowPassword(!showPassword)}
                             >
+                            <input type={showPassword ? 'text' : 'password'} placeholder="Introduce tu contraseña"/>
+                            <span className="material-symbols-outlined toggle-password" onClick={() => setShowPassword(!showPassword)}>
                                 {showPassword ? 'visibility_off' : 'visibility'}
                             </span>
                         </div>
@@ -172,6 +181,9 @@ export default function Login() {
                     <p className="register">
                         ¿No tienes una cuenta? <a href="/registro">Regístrate</a>
                     </p>
+                    <button className="btn-login">Iniciar Sesión</button>
+
+                    <p className="register"> ¿No tienes una cuenta? <a href="#">Regístrate</a></p>
                 </div>
             </div>
         </div>
