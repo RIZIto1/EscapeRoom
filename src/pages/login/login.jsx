@@ -112,11 +112,6 @@ export default function Login() {
         }
     };
 
-
-
-export default function Login() {
-    const [showPassword, setShowPassword] = useState(false);
-
     return (
         <div className="login-page">
             <div className="background">
@@ -160,7 +155,7 @@ export default function Login() {
                             <span
                                 className="material-symbols-outlined toggle-password"
                                 onClick={() => setShowPassword(!showPassword)}
-                            >
+                            ></span>
                             <input type={showPassword ? 'text' : 'password'} placeholder="Introduce tu contraseña"/>
                             <span className="material-symbols-outlined toggle-password" onClick={() => setShowPassword(!showPassword)}>
                                 {showPassword ? 'visibility_off' : 'visibility'}
