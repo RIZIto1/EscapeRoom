@@ -39,7 +39,7 @@ export default function Admin() {
             <main className="main">
                 <section className="dashboard-header">
                     <h1>Panel de control</h1>
-                    <p>Here's what's happening with your escape rooms today.</p>
+                    <p>Esto es lo que está sucediendo hoy con vuestras salas de escape.</p>
                 </section>
 
                 <section className="cards">
