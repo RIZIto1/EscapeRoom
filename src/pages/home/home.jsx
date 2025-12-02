@@ -14,7 +14,6 @@ export default function Home() {
     useEffect(() => {
         cargarSalas();
     }, []);
-
     const cargarSalas = async () => {
         try {
             const response = await fetch('http://localhost:3000/salas/getall');
