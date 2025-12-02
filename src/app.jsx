@@ -5,7 +5,7 @@ import Register from "./pages/register/register.jsx";
 import Inicio from "./pages/home/home.jsx";
 import Admin from "./pages/admin/admin.jsx";
 import ReservarSala from "./pages/reservar/reservarSala.jsx";
-import MisReservas from "./pages/mis-reservas/misReservas.jsx"; // NUEVO
+import MisReservas from "./pages/mis-reservas/misReservas.jsx"; 
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
         <Route path="/inicio" element={<Inicio />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/inicio/sala/:id" element={<ReservarSala />} />
-        <Route path="/mis-reservas" element={<MisReservas />} /> {/* NUEVO */}
+        <Route path="/mis-reservas" element={<MisReservas />} />
       </Routes>
     </Router>
   );

@@ -1,128 +1,332 @@
 import './admin.css';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 export default function Admin() {
+    const navigate = useNavigate();
+    const [salas, setSalas] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [showForm, setShowForm] = useState(false);
+    const [editingId, setEditingId] = useState(null);
+    const [formData, setFormData] = useState({
+        nombre: '',
+        capacidad: '',
+        tiempo: '',
+        dificultad: 'MEDIA',
+        precio: '',
+        imagen: ''
+    });
 
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+
+    useEffect(() => {
+        if (!usuario || usuario.rol !== 'admin') {
+            navigate('/inicio');
+            return;
+        }
+        cargarSalas();
+    }, []);
+
+    const cargarSalas = async () => {
+        try {
+            setLoading(true);
+            const res = await fetch('http://localhost:3000/salas/getall');
+            const data = await res.json();
+            setSalas(data);
+        } catch (error) {
+            console.error('Error al cargar salas:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudieron cargar las salas',
+                background: '#0a0a0a',
+                color: '#ffffff',
+                confirmButtonColor: '#22c55e'
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const resetForm = () => {
+        setFormData({
+            nombre: '',
+            capacidad: '',
+            tiempo: '',
+            dificultad: 'MEDIA',
+            precio: '',
+            imagen: ''
+        });
+        setEditingId(null);
+        setShowForm(false);
+    };
+
+    const handleEdit = (sala) => {
+        setFormData({
+            nombre: sala.nombre,
+            capacidad: sala.capacidad,
+            tiempo: sala.tiempo,
+            dificultad: sala.dificultad,
+            precio: sala.precio,
+            imagen: sala.imagen
+        });
+        setEditingId(sala.ID_salas);
+        setShowForm(true);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (!formData.nombre || !formData.capacidad || !formData.tiempo || !formData.precio || !formData.imagen) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campos requeridos',
+                text: 'Por favor completa todos los campos',
+                background: '#0a0a0a',
+                color: '#ffffff',
+                confirmButtonColor: '#22c55e'
+            });
+            return;
+        }
+
+        try {
+            const salaData = {
+                nombre: formData.nombre,
+                capacidad: parseInt(formData.capacidad),
+                tiempo: parseInt(formData.tiempo),
+                dificultad: formData.dificultad,
+                precio: parseFloat(formData.precio),
+                imagen: formData.imagen
+            };
+
+            let res;
+            if (editingId) {
+                res = await fetch(`http://localhost:3000/salas/update/${editingId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(salaData)
+                });
+            } else {
+                res = await fetch('http://localhost:3000/salas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(salaData)
+                });
+            }
+
+            if (res.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: editingId ? 'Sala actualizada' : 'Sala creada',
+                    text: editingId ? 'La sala se ha actualizado exitosamente' : 'La sala se ha creado exitosamente',
+                    background: '#0a0a0a',
+                    color: '#ffffff',
+                    confirmButtonColor: '#22c55e'
+                });
+                resetForm();
+                cargarSalas();
+            } else {
+                const error = await res.json();
+                throw new Error(error.error || 'Error al procesar la sala');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message,
+                background: '#0a0a0a',
+                color: '#ffffff',
+                confirmButtonColor: '#22c55e'
+            });
+        }
+    };
+
+    const handleDelete = async (id) => {
+        const result = await Swal.fire({
+            title: '¿Eliminar sala?',
+            text: 'Esta acción no se puede deshacer',
+            icon: 'warning',
+            background: '#0a0a0a',
+            color: '#ffffff',
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#555',
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const res = await fetch(`http://localhost:3000/salas/delete/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (res.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Eliminada',
+                        background: '#0a0a0a',
+                        color: '#ffffff',
+                        confirmButtonColor: '#22c55e'
+                    });
+                    cargarSalas();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    };
+
+    if (loading) {
+        return <div className="admin-loading"><div className="spinner"></div></div>;
+    }
 
     return (
-        <div className='container'>
-            {/* Sidebar */}
-            <aside className="sidebar">
-                <div className="sidebar-content">
-                    <div className="sidebar-header">
-                        <div className="logo"></div>
-                        <div className="sidebar-info">
-                            <h1>Admin</h1>
-                            <p>Club Escape</p>
-                        </div>
-                    </div>
+        <div className="admin-container">
+            <header className="admin-header">
+                <div className="admin-header-content" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <button onClick={() => navigate('/inicio')} className="btn-back" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#22c55e', fontSize: '1.5rem' }}>
+                        <span className="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <h1>Admin</h1>
+                </div>
+            </header>
 
-                    <nav className="menu">
-                        <a href="#" className="menu-item active">
-                            <span className="icon material-symbols-outlined">home</span>
-                            <p>Panel de control</p>
-                        </a>
-                        <a href="#" className="menu-item">
-                            <span className="icon material-symbols-outlined">calendar_month</span>
-                            <p>Reservas</p>
-                        </a>
-                        <a href="#" className="menu-item">
-                            <span className="icon material-symbols-outlined">bar_chart</span>
-                            <p>Analíticas</p>
-                        </a>
-                    </nav>
+            <main className="admin-main">
+                <div className="admin-toolbar">
+                    <h2>Tus Salas</h2>
+                    <button 
+                        className="btn-crear"
+                        onClick={() => setShowForm(!showForm)}
+                    >
+                        <span className="material-symbols-outlined">add</span>
+                        Nueva Sala
+                    </button>
                 </div>
 
-                <button className="btn-primary">Nueva sala</button>
-            </aside>
-
-            {/* Main content */}
-            <main className="main">
-                <section className="dashboard-header">
-                    <h1>Panel de control</h1>
-                    <p>Esto es lo que está sucediendo hoy con vuestras salas de escape.</p>
-                </section>
-
-                <section className="cards">
-                    <div className="card">
-                        <p className="label">Reservas de hoy</p>
-                        <p className="value">14</p>
-                        <p className="change">+5% from yesterday</p>
+                {showForm && (
+                    <div className="form-container">
+                        <h3>{editingId ? 'Editar Sala' : 'Nueva Sala'}</h3>
+                        <form onSubmit={handleSubmit}>
+                            <input
+                                type="text"
+                                name="nombre"
+                                placeholder="Nombre de la sala"
+                                value={formData.nombre}
+                                onChange={handleChange}
+                                required
+                            />
+                            <input
+                                type="number"
+                                name="capacidad"
+                                placeholder="Capacidad (ej: 6)"
+                                value={formData.capacidad}
+                                onChange={handleChange}
+                                required
+                            />
+                            <input
+                                type="number"
+                                name="tiempo"
+                                placeholder="Tiempo (minutos)"
+                                value={formData.tiempo}
+                                onChange={handleChange}
+                                required
+                            />
+                            <select
+                                name="dificultad"
+                                value={formData.dificultad}
+                                onChange={handleChange}
+                            >
+                                <option value="BAJA">Baja</option>
+                                <option value="MEDIA">Media</option>
+                                <option value="ALTA">Alta</option>
+                            </select>
+                            <input
+                                type="number"
+                                name="precio"
+                                placeholder="Precio por persona"
+                                value={formData.precio}
+                                onChange={handleChange}
+                                step="0.01"
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="imagen"
+                                placeholder="URL de la imagen"
+                                value={formData.imagen}
+                                onChange={handleChange}
+                                required
+                            />
+                            <div className="form-buttons">
+                                <button type="submit" className="btn-guardar">
+                                    {editingId ? 'Actualizar' : 'Guardar'}
+                                </button>
+                                <button 
+                                    type="button" 
+                                    className="btn-cancelar"
+                                    onClick={resetForm}
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
                     </div>
+                )}
 
-                    <div className="card">
-                        <p className="label">Upcoming Reservations</p>
-                        <p className="value">28</p>
-                        <p className="change">+2% this week</p>
-                    </div>
-
-                    <div className="card">
-                        <p className="label">Total Revenue Today</p>
-                        <p className="value">$2,100</p>
-                        <p className="change">+12% from yesterday</p>
-                    </div>
-                </section>
-
-                <section className="rooms">
-                    <div className="rooms-header">
-                        <h2>Available Escape Rooms</h2>
-                        <div className="actions">
-                            <button className="btn-secondary">
-                                <span className="icon material-symbols-outlined">tune</span>
-                                Filter
-                            </button>
-                            <button className="btn-secondary">
-                                <span className="icon material-symbols-outlined">sort</span>
-                                Sort by
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="rooms-grid">
-                        {/*  Room 1 */}
-                        <div className="room-card">
-                            <div className="room-image"></div>
-                            <div className="room-content">
-                                <h3>The Pharaoh's Curse</h3>
-                                <p>Uncover the secrets of the ancient tomb before you're trapped forever.</p>
-                                <div className="room-info">
-                                    <span><span className="icon material-symbols-outlined">group</span> 4-8 Players</span>
-                                    <span><span className="icon material-symbols-outlined">signal_cellular_alt</span> Hard</span>
+                <div className="salas-grid">
+                    {salas.map(sala => (
+                        <div key={sala.ID_salas} className="sala-card">
+                            <div className="sala-img">
+                                <img 
+                                    src={sala.imagen} 
+                                    alt={sala.nombre}
+                                    onError={(e) => {
+                                        e.target.src = '/images/no-image.jpg';
+                                    }}
+                                />
+                            </div>
+                            <div className="sala-details">
+                                <h3>{sala.nombre}</h3>
+                                <p className="capacidad">
+                                    <span className="material-symbols-outlined">group</span>
+                                    {sala.capacidad} jugadores
+                                </p>
+                                <p className="tiempo">
+                                    <span className="material-symbols-outlined">schedule</span>
+                                    {sala.tiempo} min
+                                </p>
+                                <p className="precio">${sala.precio}/persona</p>
+                                <div className="sala-buttons">
+                                    <button 
+                                        className="btn-edit"
+                                        onClick={() => handleEdit(sala)}
+                                    >
+                                        <span className="material-symbols-outlined">edit</span>
+                                        Editar
+                                    </button>
+                                    <button 
+                                        className="btn-delete"
+                                        onClick={() => handleDelete(sala.ID_salas)}
+                                    >
+                                        <span className="material-symbols-outlined">delete</span>
+                                        Eliminar
+                                    </button>
                                 </div>
-                                <button className="btn-primary small">View Schedule</button>
                             </div>
                         </div>
-
-                        {/* Room 2 */}
-                        <div className="room-card">
-                            <div className="room-image"></div>
-                            <div className="room-content">
-                                <h3>Cybernetic Sabotage</h3>
-                                <p>Infiltrate the AI core and stop the rogue system from launching a global attack.</p>
-                                <div className="room-info">
-                                    <span><span className="icon material-symbols-outlined">group</span> 2-6 Players</span>
-                                    <span><span className="icon material-symbols-outlined">signal_cellular_alt</span> Medium</span>
-                                </div>
-                                <button className="btn-primary small">View Schedule</button>
-                            </div>
-                        </div>
-
-                        {/* Room 3 */}
-                        <div className="room-card">
-                            <div className="room-image"></div>
-                            <div className="room-content">
-                                <h3>Marooned Mariner</h3>
-                                <p>Find Captain Blackheart's hidden treasure before his ghost returns at high tide.</p>
-                                <div className="room-info">
-                                    <span><span className="icon material-symbols-outlined">group</span> 3-7 Players</span>
-                                    <span><span className="icon material-symbols-outlined">signal_cellular_alt</span> Easy</span>
-                                </div>
-                                <button className="btn-primary small">View Schedule</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                    ))}
+                </div>
             </main>
         </div>
-
-    )
+    );
 }
