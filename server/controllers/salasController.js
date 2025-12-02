@@ -3,14 +3,14 @@ const db = require('../config/config.js');
 
 exports.crearSala = async (req, res) => {
     console.log('Solicitud recibida en crearSala:', req.body);
-    const { nombre, capacidad, dificultad, tiempo, precio } = req.body;
-    console.log('Campos extraídos:', { nombre, capacidad, dificultad, tiempo, precio });
-    if (!nombre || !capacidad || !dificultad || !tiempo || !precio) {
-        console.log('Validación fallida. Campos faltantes:', { nombre, capacidad, dificultad, tiempo, precio });
+    const { nombre, capacidad, dificultad, tiempo, precio, imagen } = req.body;
+    console.log('Campos extraídos:', { nombre, capacidad, dificultad, tiempo, precio, imagen });
+    if (!nombre || !capacidad || !dificultad || !tiempo || !precio || !imagen) {
+        console.log('Validación fallida. Campos faltantes:', { nombre, capacidad, dificultad, tiempo, precio, imagen });
         return res.status(400).json({ error: 'Campos obligatorios faltantes' });
     }
     try {
-        const result = await salasModel.crearSala(nombre, capacidad, dificultad, tiempo, precio);
+        const result = await salasModel.crearSala(nombre, capacidad, dificultad, tiempo, precio, imagen);
         console.log('Resultado de crearSala:', result);
         res.status(201).json({ message: 'Sala creada', salaId: result.insertId });
     } catch (error) {
@@ -31,9 +31,9 @@ exports.getAllSalas = async (req, res) => {
 
 exports.updateSala = async (req, res) => {
     const { id } = req.params;
-    const { nombre, capacidad, dificultad, tiempo, precio } = req.body;
+    const { nombre, capacidad, dificultad, tiempo, precio, imagen } = req.body;
     try {
-        const result = await salasModel.updateSala(id, nombre, capacidad, dificultad, tiempo, precio);
+        const result = await salasModel.updateSala(id, nombre, capacidad, dificultad, tiempo, precio, imagen);
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'Sala no encontrada' });
         }

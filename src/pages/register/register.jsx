@@ -16,7 +16,6 @@ export default function Register() {
         contrasenia: ''
     });
 
-    // Actualiza el formulario cuando escribe el usuario
     const handleChange = (e) => {
         setForm({
             ...form,
@@ -37,7 +36,6 @@ export default function Register() {
         });
     };
 
-    // Envía el formulario
     const handleSubmit = async () => {
         if (!form.nombre || !form.apellido || !form.telefono || !form.mail || !form.contrasenia) {
             Swal.fire({
@@ -65,7 +63,6 @@ export default function Register() {
             return;
         }
 
-        // Validación de email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(form.mail)) {
             Swal.fire({
@@ -93,7 +90,6 @@ export default function Register() {
             const data = await response.json();
 
             if (response.ok) {
-                // Registro exitoso
                 await Swal.fire({
                     icon: 'success',
                     title: '¡Registro exitoso!',
@@ -108,7 +104,6 @@ export default function Register() {
                 
                 navigate('/');
             } else {
-                // Error del servidor
                 Swal.fire({
                     icon: 'error',
                     title: 'Error al registrar',
@@ -142,10 +137,7 @@ export default function Register() {
 
             <div className="register-container">
                 <div className="register-header">
-                    <div className="icon-box">
-                        <span className="material-symbols-outlined">person_add</span>
-                    </div>
-                    <h1>Crear Cuenta</h1>
+                    <h1>Registrarse</h1>
                 </div>
 
                 <div className="register-form">

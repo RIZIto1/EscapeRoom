@@ -29,15 +29,12 @@ export default function MisReservas() {
             const response = await fetch(`http://localhost:3000/reservas/getall/${usuario.id}`);
             const data = await response.json();
             
-            // Obtener información adicional de salas y horarios
             const reservasConDetalles = await Promise.all(
                 data.map(async (reserva) => {
-                    // Obtener sala
                     const resSala = await fetch('http://localhost:3000/salas/getall');
                     const salas = await resSala.json();
                     const sala = salas.find(s => s.ID_salas === reserva.FK_ID_salas);
                     
-                    // Obtener horario
                     const resHorario = await fetch(`http://localhost:3000/horarios/getHorario/${reserva.FK_ID_horarios}`);
                     const horario = await resHorario.json();
                     
@@ -194,11 +191,14 @@ export default function MisReservas() {
     return (
         <div className="mis-reservas-page">
             <header className="mis-reservas-header">
-                <button onClick={() => navigate('/inicio')} className="btn-back-header">
-                    <span className="material-symbols-outlined">arrow_back</span>
-                    Volver al inicio
-                </button>
-                <h1>Mis Reservas</h1>
+                <div className="header-content-reservas" style={{ padding: '0 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <button onClick={() => navigate('/inicio')} className="btn-back" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#22c55e', fontSize: '1.5rem' }}>
+                            <span className="material-symbols-outlined">arrow_back</span>
+                        </button>
+                        <h1 style={{ color: '#fff', margin: 0 }}>Mis Reservas</h1>
+                    </div>
+                </div>
             </header>
 
             <main className="mis-reservas-main">
@@ -216,7 +216,6 @@ export default function MisReservas() {
                         {reservas.map((reserva) => (
                             <div key={reserva.ID_reservas} className="reserva-card">
                                 {editando === reserva.ID_reservas ? (
-                                    // Modo edición
                                     <div className="reserva-editar">
                                         <h3>{reserva.sala?.nombre}</h3>
                                         
@@ -270,7 +269,6 @@ export default function MisReservas() {
                                         </div>
                                     </div>
                                 ) : (
-                                    // Modo vista
                                     <>
                                         <div className="reserva-imagen">
                                             <img
