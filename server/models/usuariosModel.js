@@ -2,7 +2,7 @@ const db = require ('../config/config.js');
 
 exports.setUsuario = async (nombre, apellido, telefono, mail, contrasenia) => {
   const [result] = await db.query(
-    'INSERT INTO usuarios (nombre, apellido, telefono, mail, contrasenia) VALUES (?, ?, ?, ?, ?)',
+    'INSERT INTO usuarios (nombre, apellido, telefono, mail, contraseña) VALUES (?, ?, ?, ?, ?)',
     [nombre, apellido, telefono, mail, contrasenia]
   );
   return result;

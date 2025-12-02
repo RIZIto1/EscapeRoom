@@ -20,7 +20,6 @@ export default function Home() {
             const response = await fetch('http://localhost:3000/salas/getall');
             const data = await response.json();
             setSalas(data);
-            console.log('Salas cargadas:', data);
         } catch (error) {
             console.error('Error al cargar salas:', error);
         } finally {
@@ -28,13 +27,8 @@ export default function Home() {
         }
     };
 
-    const nextSlide = () => {
-        setCurrentIndex((prev) => (prev + 1) % salas.length);
-    };
-
-    const prevSlide = () => {
-        setCurrentIndex((prev) => (prev - 1 + salas.length) % salas.length);
-    };
+    const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % salas.length);
+    const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + salas.length) % salas.length);
 
 
     const handleLogout = () => {
@@ -69,7 +63,6 @@ export default function Home() {
 
     return (
         <div className="home-page">
-            {/* Header */}
             <header className="home-header">
                 <div className="header-content">
                     <h1>Club Escape</h1>
@@ -111,14 +104,31 @@ export default function Home() {
                 </div>
             </header>
 
-            {/* Main Content */}
             <main className="home-main">
                 <div className="intro-section">
                     <h2>Descubre Nuestras Salas</h2>
                     <p>Elige tu aventura y reserva tu experiencia</p>
                 </div>
 
-                {/* Carrusel de Salas */}
+                {/* Información del local */}
+                <section className="info-local">
+                    <h3>Información del Local</h3>
+                    <div className="info-grid">
+                        <div className="info-item">
+                            <span className="material-symbols-outlined">location_on</span>
+                            <p>Avenida Siempre Viva 742, Springfield</p>
+                        </div>
+                        <div className="info-item">
+                            <span className="material-symbols-outlined">schedule</span>
+                            <p>Lunes a Domingo: 14:00 - 23:00</p>
+                        </div>
+                        <div className="info-item">
+                            <span className="material-symbols-outlined">call</span>
+                            <p>+54 11 5555 5555</p>
+                        </div>
+                    </div>
+                </section>
+
                 {salas.length > 0 ? (
                     <div className="carousel-container">
                         <button
@@ -135,11 +145,8 @@ export default function Home() {
                                     <img
                                         src={`/images/${salas[currentIndex].nombre.replace(/\s+/g, '-').toLowerCase()}.jpg`}
                                         alt={salas[currentIndex].nombre}
-                                        onError={(e) => {
-                                            e.target.src = '/images/no-image.jpg';
-                                        }}
+                                        onError={(e) => { e.target.src = '/images/no-image.jpg'; }}
                                     />
-                                    {console.log(`./images/${salas[currentIndex].nombre.replace(/\s+/g, '-').toLowerCase()}.jpg`)}
                                     <div className="sala-overlay">
                                         <h3>{salas[currentIndex].nombre}</h3>
                                     </div>
@@ -175,7 +182,6 @@ export default function Home() {
                                 </div>
                             </div>
 
-                            {/* Indicadores */}
                             <div className="carousel-indicators">
                                 {salas.map((_, index) => (
                                     <button
