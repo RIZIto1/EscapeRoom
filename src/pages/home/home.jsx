@@ -43,7 +43,7 @@ export default function Home() {
         navigate('/');
         setMenuOpen(false);
     };
-    
+
     // Cerrar menú al hacer clic fuera
     useEffect(() => {
         if (!menuOpen) return;
@@ -65,7 +65,7 @@ export default function Home() {
         );
     }
 
-    
+
 
     return (
         <div className="home-page">
@@ -73,7 +73,7 @@ export default function Home() {
             <header className="home-header">
                 <div className="header-content">
                     <h1>Club Escape</h1>
-                    <div className="user-info" style={{position:'relative'}}>
+                    <div className="user-info" style={{ position: 'relative' }}>
                         <span className="user-name">
                             Hola, <strong>{usuario?.nombre}</strong>
                         </span>
@@ -84,20 +84,27 @@ export default function Home() {
                             Cerrar Sesión
                         </button>
                         {/* Botón menú hamburguesa */}
-                        <button className='btn-menu' style={{background:'none',border:'none',cursor:'pointer',marginLeft:'10px'}} onClick={()=>setMenuOpen((v)=>!v)}>
-                            <img className="img-menu" src='/images/menu.png' alt="Menú" style={{width:'32px',height:'32px'}} />
+                        <button className='btn-menu' style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: '10px' }} onClick={() => setMenuOpen((v) => !v)}>
+                            <img className="img-menu" src='/images/menu.png' alt="Menú" style={{ width: '32px', height: '32px' }} />
                         </button>
                         {/* Menú desplegable */}
+
                         {menuOpen && (
-                            <ul className='list-menu' ref={menuRef} style={{position:'absolute',top:'48px',right:0,background:'#112117',color:'#fff',boxShadow:'0 2px 8px rgba(0,0,0,0.15)',borderRadius:'8px',padding:'16px 0',minWidth:'160px',zIndex:100}}>
+                            <ul className='list-menu' ref={menuRef} style={{position: 'absolute', top: '48px', right: 0, background: '#112117', color: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', borderRadius: '8px', padding: '16px 0', minWidth: '160px', zIndex: 100 }}>
                                 {usuario?.rol === 'admin' && (
-                                    <li style={{padding:'8px 24px',cursor:'pointer'}} onClick={()=>{navigate('/admin');setMenuOpen(false);}}>Panel Admin</li>
+                                    <li style={{ padding: '8px 24px', cursor: 'pointer' }}
+                                        onClick={() => { navigate('/admin'); setMenuOpen(false); }}>
+                                        Panel Admin
+                                    </li>
                                 )}
-                                {usuario?.rol === 'usuario' && <>
-                                    <li style={{padding:'8px 24px',cursor:'pointer'}} onClick={()=>{navigate('/reservar');setMenuOpen(false);}}>Reservar</li>
-                                    <li style={{padding:'8px 24px',cursor:'pointer'}} onClick={()=>{navigate('/mis-reservas');setMenuOpen(false);}}>Mis Reservas</li>
-                                </>}
-                                <li style={{padding:'8px 24px',cursor:'pointer',color:'#e84a5f'}} onClick={handleLogout}>Cerrar Sesión</li>
+                                <li style={{ padding: '8px 24px', cursor: 'pointer' }}
+                                    onClick={() => { navigate('/mis-reservas'); setMenuOpen(false); }}>
+                                    Mis Reservas
+                                </li>
+                                <li style={{ padding: '8px 24px', cursor: 'pointer', color: '#e84a5f' }}
+                                    onClick={handleLogout}>
+                                    Cerrar Sesión
+                                </li>
                             </ul>
                         )}
                     </div>
@@ -114,8 +121,8 @@ export default function Home() {
                 {/* Carrusel de Salas */}
                 {salas.length > 0 ? (
                     <div className="carousel-container">
-                        <button 
-                            className="carousel-btn prev" 
+                        <button
+                            className="carousel-btn prev"
                             onClick={prevSlide}
                             disabled={salas.length <= 1}
                         >
@@ -125,7 +132,7 @@ export default function Home() {
                         <div className="carousel-content">
                             <div className="sala-card">
                                 <div className="sala-image">
-                                    <img 
+                                    <img
                                         src={`/images/${salas[currentIndex].nombre.replace(/\s+/g, '-').toLowerCase()}.jpg`}
                                         alt={salas[currentIndex].nombre}
                                         onError={(e) => {
@@ -150,9 +157,9 @@ export default function Home() {
                                         </div>
                                         <div className="detail-item">
                                             <span className="material-symbols-outlined">
-                                                {salas[currentIndex].dificultad === 'BAJA' ? 'sentiment_satisfied' : 
-                                                 salas[currentIndex].dificultad === 'MEDIA' ? 'sentiment_neutral' : 
-                                                 'sentiment_very_dissatisfied'}
+                                                {salas[currentIndex].dificultad === 'BAJA' ? 'sentiment_satisfied' :
+                                                    salas[currentIndex].dificultad === 'MEDIA' ? 'sentiment_neutral' :
+                                                        'sentiment_very_dissatisfied'}
                                             </span>
                                             <span>{salas[currentIndex].dificultad}</span>
                                         </div>
@@ -162,7 +169,7 @@ export default function Home() {
                                         </div>
                                     </div>
 
-                                    <button className="btn-reservar">
+                                    <button className="btn-reservar" onClick={() => navigate(`/inicio/sala/${salas[currentIndex].ID_salas}`)}>
                                         Reservar Ahora
                                     </button>
                                 </div>
@@ -180,8 +187,8 @@ export default function Home() {
                             </div>
                         </div>
 
-                        <button 
-                            className="carousel-btn next" 
+                        <button
+                            className="carousel-btn next"
                             onClick={nextSlide}
                             disabled={salas.length <= 1}
                         >

@@ -126,19 +126,17 @@ export default function Login() {
                     <h1>Iniciar Sesión</h1>
                 </div>
 
-                <div className="login-form">
+                <form className="login-form" onSubmit={e => { e.preventDefault(); handleSubmit(); }}>
                     <label>
                         <p>Correo Electrónico</p>
                         <input
-                            type="email"
+                            type="text"
                             name="mail"
                             value={form.mail}
                             onChange={handleChange}
-                            placeholder="tu@email.com"
+                            placeholder="Introduce tu correo electrónico"
                             disabled={loading}
                         />
-                        <p>Usuario o Correo Electrónico</p>
-                        <input type="text" placeholder="Introduce tu usuario o correo electrónico"/>
                     </label>
 
                     <label>
@@ -152,34 +150,18 @@ export default function Login() {
                                 placeholder="Introduce tu contraseña"
                                 disabled={loading}
                             />
-                            <span
-                                className="material-symbols-outlined toggle-password"
-                                onClick={() => setShowPassword(!showPassword)}
-                            ></span>
-                            <input type={showPassword ? 'text' : 'password'} placeholder="Introduce tu contraseña"/>
-                            <span className="material-symbols-outlined toggle-password" onClick={() => setShowPassword(!showPassword)}>
-                                {showPassword ? 'visibility_off' : 'visibility'}
-                            </span>
+                            <button type="button" className="toggle-password" onClick={() => setShowPassword(!showPassword)} aria-label="Mostrar contraseña" style={{background:'transparent',border:'none'}}>
+                                <span className="material-symbols-outlined">{showPassword ? 'visibility_off' : 'visibility'}</span>
+                            </button>
                         </div>
                     </label>
 
                     <p className="forgot">¿Olvidaste tu contraseña?</p>
 
-                    <button
-                        onClick={handleSubmit}
-                        className="btn-login"
-                        disabled={loading}
-                    >
-                        Iniciar Sesión
-                    </button>
+                    <button type="submit" className="btn-login" disabled={loading}>Iniciar Sesión</button>
 
-                    <p className="register">
-                        ¿No tienes una cuenta? <a href="/registro">Regístrate</a>
-                    </p>
-                    <button className="btn-login">Iniciar Sesión</button>
-
-                    <p className="register"> ¿No tienes una cuenta? <a href="#">Regístrate</a></p>
-                </div>
+                    <p className="register"> ¿No tienes una cuenta? <a href="/registro">Regístrate</a></p>
+                </form>
             </div>
         </div>
     );

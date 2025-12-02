@@ -1,0 +1,389 @@
+.reservar-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0a0f0d 0%, #112117 100%);
+    color: #ffffff;
+}
+
+.reservar-header {
+    background: rgba(17, 33, 23, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    border-bottom: 2px solid rgba(54, 226, 123, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.btn-back-header {
+    background: rgba(54, 226, 123, 0.1);
+    border: 1px solid rgba(54, 226, 123, 0.3);
+    color: #36e27b;
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-back-header:hover {
+    background: rgba(54, 226, 123, 0.2);
+    transform: translateX(-3px);
+}
+
+.reservar-header h1 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.reservar-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.sala-info-card {
+    background: rgba(17, 33, 23, 0.6);
+    border: 2px solid rgba(54, 226, 123, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+}
+
+.sala-img-container {
+    border-radius: 12px;
+    overflow: hidden;
+    height: 300px;
+}
+
+.sala-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sala-info-details h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #36e27b;
+}
+
+.sala-specs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.spec-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(54, 226, 123, 0.1);
+}
+
+.spec-item .material-symbols-outlined {
+    color: #36e27b;
+    font-size: 1.5rem;
+}
+
+.price-spec {
+    grid-column: 1 / -1;
+    background: rgba(54, 226, 123, 0.1);
+    border-color: rgba(54, 226, 123, 0.3);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.fecha-section {
+    background: rgba(17, 33, 23, 0.6);
+    border: 2px solid rgba(54, 226, 123, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.fecha-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #36e27b;
+}
+
+.fecha-actual {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    text-transform: capitalize;
+}
+
+.btn-cambiar-fecha {
+    background: rgba(54, 226, 123, 0.1);
+    border: 1px solid rgba(54, 226, 123, 0.3);
+    color: #36e27b;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-cambiar-fecha:hover {
+    background: rgba(54, 226, 123, 0.2);
+    transform: translateY(-2px);
+}
+
+.calendar-picker {
+    margin-top: 1.5rem;
+}
+
+.calendar-picker input[type="date"] {
+    background: rgba(17, 33, 23, 0.8);
+    border: 2px solid rgba(54, 226, 123, 0.3);
+    color: #ffffff;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
+}
+
+.jugadores-section {
+    background: rgba(17, 33, 23, 0.6);
+    border: 2px solid rgba(54, 226, 123, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.jugadores-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #36e27b;
+}
+
+.jugadores-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.jugadores-control button {
+    background: rgba(54, 226, 123, 0.1);
+    border: 2px solid rgba(54, 226, 123, 0.3);
+    color: #36e27b;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.jugadores-control button:hover:not(:disabled) {
+    background: rgba(54, 226, 123, 0.2);
+    transform: scale(1.1);
+}
+
+.jugadores-control button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.jugadores-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #36e27b;
+    min-width: 60px;
+}
+
+.horarios-section {
+    background: rgba(17, 33, 23, 0.6);
+    border: 2px solid rgba(54, 226, 123, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.horarios-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #36e27b;
+}
+
+.horarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.horario-card {
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 2px solid;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    background: rgba(17, 33, 23, 0.8);
+}
+
+.horario-card.disponible {
+    border-color: rgba(54, 226, 123, 0.4);
+    color: #36e27b;
+}
+
+.horario-card.disponible:hover {
+    background: rgba(54, 226, 123, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(54, 226, 123, 0.2);
+}
+
+.horario-card.seleccionado {
+    background: rgba(54, 226, 123, 0.2);
+    border-color: #36e27b;
+    box-shadow: 0 0 20px rgba(54, 226, 123, 0.4);
+}
+
+.horario-card.reservado {
+    border-color: rgba(128, 128, 128, 0.3);
+    color: #888;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.horario-time {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.horario-status {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.no-horarios {
+    text-align: center;
+    padding: 2rem;
+    color: #888;
+    font-size: 1.1rem;
+}
+
+.resumen-section {
+    margin-bottom: 2rem;
+}
+
+.resumen-card {
+    background: rgba(17, 33, 23, 0.8);
+    border: 2px solid rgba(54, 226, 123, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+}
+
+.resumen-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #36e27b;
+    text-align: center;
+}
+
+.resumen-details {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.resumen-details p {
+    margin: 0.7rem 0;
+    font-size: 1.1rem;
+}
+
+.resumen-total {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid rgba(54, 226, 123, 0.2);
+    font-size: 1.5rem !important;
+    color: #36e27b;
+}
+
+.btn-confirmar-reserva {
+    width: 100%;
+    background: linear-gradient(135deg, #36e27b 0%, #2ab866 100%);
+    border: none;
+    color: #0a0f0d;
+    padding: 1.2rem;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-confirmar-reserva:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(54, 226, 123, 0.4);
+}
+
+.btn-confirmar-reserva:disabled {
+    background: rgba(128, 128, 128, 0.3);
+    cursor: not-allowed;
+    color: #888;
+}
+
+.reservar-loading,
+.reservar-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    gap: 1rem;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(54, 226, 123, 0.1);
+    border-top-color: #36e27b;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .sala-info-card {
+        grid-template-columns: 1fr;
+    }
+    
+    .sala-specs {
+        grid-template-columns: 1fr;
+    }
+    
+    .horarios-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
