@@ -14,6 +14,7 @@ export default function Home() {
     useEffect(() => {
         cargarSalas();
     }, []);
+
     const cargarSalas = async () => {
         try {
             const response = await fetch('http://localhost:3000/salas/getall');
@@ -123,7 +124,7 @@ export default function Home() {
                             <div className="sala-card">
                                 <div className="sala-image">
                                     <img
-                                        src={`/images/${salas[currentIndex].nombre.replace(/\s+/g, '-').toLowerCase()}.jpg`}
+                                        src={salas[currentIndex].imagen}
                                         alt={salas[currentIndex].nombre}
                                         onError={(e) => {
                                             e.target.src = '/images/no-image.jpg';
