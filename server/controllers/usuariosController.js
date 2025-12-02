@@ -2,10 +2,6 @@ const usuariosModel = require('../models/usuariosModel.js');
 const bcrypt = require('bcryptjs');
 const { generarToken } = require('../middleware/auth.js');
 
-/**
- * POST /usuarios
- * Crear un nuevo usuario (registro)
- */
 exports.crearUsuario = async (req, res) => {
   console.log('Solicitud recibida en crearUsuario:', req.body);
   const { nombre, apellido, telefono, mail, contrasenia } = req.body;

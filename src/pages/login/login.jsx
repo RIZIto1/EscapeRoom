@@ -12,8 +12,6 @@ export default function Login() {
         mail: '',
         contrasenia: ''
     });
-
-    // Actualiza el formulario cuando escribe el usuario
     const handleChange = (e) => {
         setForm({
             ...form,
@@ -34,7 +32,6 @@ export default function Login() {
         });
     };
 
-    // Envía el formulario
     const handleSubmit = async () => {
         if (!form.mail || !form.contrasenia) {
             Swal.fire({
@@ -62,8 +59,6 @@ export default function Login() {
             const data = await response.json();
 
             if (response.ok) {
-                // Login exitoso
-                // Guardar token y datos del usuario en localStorage
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('usuario', JSON.stringify(data.usuario));
 
@@ -79,14 +74,12 @@ export default function Login() {
                     timerProgressBar: true
                 });
 
-                // Redirigir según el rol del usuario
                 if (data.usuario.rol === 'admin') {
                     navigate('/inicio'); 
                 } else {
                     navigate('/inicio');
                 }
             } else {
-                // Error del servidor
                 Swal.fire({
                     icon: 'error',
                     title: 'Error al iniciar sesión',
@@ -120,9 +113,6 @@ export default function Login() {
 
             <div className="login-container">
                 <div className="login-header">
-                    <div className="icon-box">
-                        <span className="material-symbols-outlined">key</span>
-                    </div>
                     <h1>Iniciar Sesión</h1>
                 </div>
 

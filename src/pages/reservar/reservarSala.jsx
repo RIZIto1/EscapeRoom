@@ -30,13 +30,11 @@ export default function ReservarSala() {
         try {
             setLoading(true);
             
-            // Cargar sala
             const resSalas = await fetch('http://localhost:3000/salas/getall');
             const salas = await resSalas.json();
             const salaEncontrada = salas.find(s => s.ID_salas === parseInt(id));
             setSala(salaEncontrada);
 
-            // Cargar horarios de la sala
             const resHorarios = await fetch(`http://localhost:3000/horarios/sala/${id}`);
             const horariosData = await resHorarios.json();
             setHorarios(horariosData);
@@ -61,7 +59,6 @@ export default function ReservarSala() {
             const res = await fetch('http://localhost:3000/reservas/getall');
             const todasReservas = await res.json();
             
-            // Filtrar reservas de esta sala y fecha
             const fechaSeleccionada = selectedDate.toISOString().split('T')[0];
             const reservasFiltradas = todasReservas.filter(r => 
                 r.FK_ID_salas === parseInt(id) && 
@@ -191,7 +188,6 @@ export default function ReservarSala() {
 
     return (
         <div className="reservar-page">
-            {/* Header */}
             <header className="reservar-header">
                 <button onClick={() => navigate('/inicio')} className="btn-back-header">
                     <span className="material-symbols-outlined">arrow_back</span>
@@ -201,7 +197,6 @@ export default function ReservarSala() {
             </header>
 
             <main className="reservar-main">
-                {/* Información de la sala */}
                 <section className="sala-info-card">
                     <div className="sala-img-container">
                         <img 
@@ -213,9 +208,8 @@ export default function ReservarSala() {
                         />
                     </div>
                     
-                    <div className="sala-info-details">
+                    <div className="sala-info-content">
                         <h2>{sala.nombre}</h2>
-                        
                         <div className="sala-specs">
                             <div className="spec-item">
                                 <span className="material-symbols-outlined">group</span>
@@ -241,56 +235,55 @@ export default function ReservarSala() {
                     </div>
                 </section>
 
-                {/* Selección de fecha */}
-                <section className="fecha-section">
-                    <h3>Fecha seleccionada</h3>
-                    <p className="fecha-actual">{formatearFecha(selectedDate)}</p>
-                    
-                    <button 
-                        className="btn-cambiar-fecha"
-                        onClick={() => setShowCalendar(!showCalendar)}
-                    >
-                        <span className="material-symbols-outlined">calendar_month</span>
-                        Elegir otra fecha
-                    </button>
+                <div className="fecha-jugadores-container">
+                    <section className="fecha-section">
+                        <p className="fecha-label">Fecha</p>
+                        <p className="fecha-actual">{formatearFecha(selectedDate)}</p>
+                        
+                        <button 
+                            className="btn-cambiar-fecha"
+                            onClick={() => setShowCalendar(!showCalendar)}
+                        >
+                            <span className="material-symbols-outlined">calendar_month</span>
+                            Cambiar
+                        </button>
 
-                    {showCalendar && (
-                        <div className="calendar-picker">
-                            <input 
-                                type="date" 
-                                value={selectedDate.toISOString().split('T')[0]}
-                                min={new Date().toISOString().split('T')[0]}
-                                onChange={(e) => {
-                                    setSelectedDate(new Date(e.target.value + 'T12:00:00'));
-                                    setShowCalendar(false);
-                                    setSelectedHorario(null);
-                                }}
-                            />
+                        {showCalendar && (
+                            <div className="calendar-picker">
+                                <input 
+                                    type="date" 
+                                    value={selectedDate.toISOString().split('T')[0]}
+                                    min={new Date().toISOString().split('T')[0]}
+                                    onChange={(e) => {
+                                        setSelectedDate(new Date(e.target.value + 'T12:00:00'));
+                                        setShowCalendar(false);
+                                        setSelectedHorario(null);
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </section>
+
+                    <section className="jugadores-section">
+                        <p className="jugadores-label">Jugadores</p>
+                        <div className="jugadores-control">
+                            <button 
+                                onClick={() => setJugadores(Math.max(1, jugadores - 1))}
+                                disabled={jugadores <= 1}
+                            >
+                                <span className="material-symbols-outlined">remove</span>
+                            </button>
+                            <span className="jugadores-number">{jugadores}</span>
+                            <button 
+                                onClick={() => setJugadores(Math.min(sala.capacidad, jugadores + 1))}
+                                disabled={jugadores >= sala.capacidad}
+                            >
+                                <span className="material-symbols-outlined">add</span>
+                            </button>
                         </div>
-                    )}
-                </section>
+                    </section>
+                </div>
 
-                {/* Número de jugadores */}
-                <section className="jugadores-section">
-                    <h3>Número de jugadores</h3>
-                    <div className="jugadores-control">
-                        <button 
-                            onClick={() => setJugadores(Math.max(1, jugadores - 1))}
-                            disabled={jugadores <= 1}
-                        >
-                            <span className="material-symbols-outlined">remove</span>
-                        </button>
-                        <span className="jugadores-number">{jugadores}</span>
-                        <button 
-                            onClick={() => setJugadores(Math.min(sala.capacidad, jugadores + 1))}
-                            disabled={jugadores >= sala.capacidad}
-                        >
-                            <span className="material-symbols-outlined">add</span>
-                        </button>
-                    </div>
-                </section>
-
-                {/* Horarios disponibles */}
                 <section className="horarios-section">
                     <h3>Horarios disponibles - {getDiaSemana(selectedDate)}</h3>
                     
@@ -325,18 +318,13 @@ export default function ReservarSala() {
                     )}
                 </section>
 
-                {/* Resumen y botón de reservar */}
                 <section className="resumen-section">
                     <div className="resumen-card">
-                        <h3>Resumen de tu reserva</h3>
+                        <h3>Tu Reserva</h3>
                         <div className="resumen-details">
-                            <p><strong>Sala:</strong> {sala.nombre}</p>
-                            <p><strong>Fecha:</strong> {formatearFecha(selectedDate)}</p>
-                            <p><strong>Horario:</strong> {selectedHorario ? selectedHorario.hora_inicio.substring(0, 5) : 'No seleccionado'}</p>
-                            <p><strong>Jugadores:</strong> {jugadores}</p>
-                            <p className="resumen-total">
-                                <strong>Total:</strong> ${sala.precio * jugadores}
-                            </p>
+                            <p><strong>{sala.nombre}</strong></p>
+                            <p>{formatearFecha(selectedDate)} {selectedHorario ? selectedHorario.hora_inicio.substring(0, 5) : '—'} • {jugadores} jugadores</p>
+                            <p className="resumen-total">${sala.precio * jugadores}</p>
                         </div>
                         
                         <button 

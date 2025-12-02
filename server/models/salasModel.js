@@ -1,9 +1,9 @@
 const db = require ('../config/config.js');
 
-exports.crearSala = async (nombre, capacidad, dificultad, tiempo, precio) => {
+exports.crearSala = async (nombre, capacidad, dificultad, tiempo, precio, imagen) => {
     const [result] = await db.query(
-        'INSERT INTO salas (nombre, capacidad, dificultad, tiempo, precio) VALUES (?, ?, ?, ?, ?)',
-        [nombre, capacidad, dificultad, tiempo, precio]
+        'INSERT INTO salas (nombre, capacidad, dificultad, tiempo, precio, imagen) VALUES (?, ?, ?, ?, ?, ?)',
+        [nombre, capacidad, dificultad, tiempo, precio, imagen]
     );
     return result;
 }
@@ -18,10 +18,10 @@ exports.deleteSala = async (id) => {
     return result;  
 }
 
-exports.updateSala = async (id, nombre, capacidad, dificultad, tiempo, precio) => {
+exports.updateSala = async (id, nombre, capacidad, dificultad, tiempo, precio, imagen) => {
     const [result] = await db.query( 
-        'UPDATE salas SET nombre = ?, capacidad = ?, dificultad = ?, tiempo = ?, precio = ? WHERE ID_salas = ?',    
-        [nombre, capacidad, dificultad, tiempo, precio, id]
+        'UPDATE salas SET nombre = ?, capacidad = ?, dificultad = ?, tiempo = ?, precio = ?, imagen = ? WHERE ID_salas = ?',    
+        [nombre, capacidad, dificultad, tiempo, precio, imagen, id]
     );
     return result;
 }
