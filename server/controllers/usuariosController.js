@@ -11,7 +11,6 @@ exports.crearUsuario = async (req, res) => {
   const { nombre, apellido, telefono, mail, contrasenia } = req.body;
   console.log('Campos extraídos:', { nombre, apellido, telefono, mail, contrasenia });
   
-  // Validaciones
   if (!nombre || !apellido || !telefono || !mail || !contrasenia) {
     console.log('Validación fallida. Campos faltantes');
     return res.status(400).json({ error: 'Campos obligatorios faltantes' });
@@ -27,17 +26,14 @@ exports.crearUsuario = async (req, res) => {
   }
 
   try {
-    // Verificar si el email ya existe
     const usuarioExistente = await usuariosModel.getUsuarioByEmail(mail);
     if (usuarioExistente.length > 0) {
       return res.status(409).json({ error: 'El email ya está registrado' });
     }
 
-    // Hashear contraseña
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(contrasenia, salt);
 
-    // Crear usuario
     const result = await usuariosModel.setUsuario(nombre, apellido, telefono, mail, hashPassword);
     console.log('Resultado de la inserción:', result);
     
@@ -57,22 +53,16 @@ exports.crearUsuario = async (req, res) => {
   }
 };
 
-/**
- * POST /usuarios/login
- * Iniciar sesión y obtener JWT
- */
 exports.login = async (req, res) => {
   console.log('Solicitud recibida en login:', req.body);
   const { mail, contrasenia } = req.body;
 
-  // Validaciones
   if (!mail || !contrasenia) {
     console.log('Validación fallida. Campos faltantes');
     return res.status(400).json({ error: 'Email y contraseña son requeridos' });
   }
 
   try {
-    // Buscar usuario por email
     const users = await usuariosModel.getUsuarioByEmail(mail);
     console.log('Usuarios encontrados:', users);
     
@@ -93,11 +83,9 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: 'Credenciales incorrectas' });
     }
 
-    // Generar token JWT
     const token = generarToken(user);
     console.log('Token generado exitosamente');
 
-    // Devolver token y datos del usuario (sin la contraseña)
     res.json({ 
       mensaje: 'Login exitoso',
       token: token,
@@ -116,11 +104,6 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: 'Error en login', details: error.message });
   }
 };
-
-/**
- * POST /usuarios/verificar-token
- * Verificar si un token es válido
- */
 exports.verificarToken = async (req, res) => {
   try {
     const { token } = req.body;
@@ -147,14 +130,10 @@ exports.verificarToken = async (req, res) => {
   }
 };
 
-/**
- * PUT /usuarios/:id/promover
- * Promover usuario a admin (SOLO ADMIN)
- */
+
 exports.promoverUsuario = async (req, res) => {
   console.log('Solicitud recibida en promoverUsuario:', { user: req.user, params: req.params });
   
-  // req.user viene del middleware verificarToken
   if (!req.user || req.user.rol !== 'admin') {
     return res.status(403).json({ error: 'No autorizado, solo administradores' });
   }
@@ -176,10 +155,7 @@ exports.promoverUsuario = async (req, res) => {
   }
 };
 
-/**
- * GET /usuarios/:mail
- * Obtener usuario por email (REQUIERE AUTENTICACIÓN)
- */
+
 exports.getUsuarioByEmail = async (req, res) => {
   const { mail } = req.params;
   
@@ -192,7 +168,6 @@ exports.getUsuarioByEmail = async (req, res) => {
     
     const user = users[0];
     
-    // No devolver la contraseña
     delete user.contrasenia;
     
     res.json(user);
@@ -203,15 +178,11 @@ exports.getUsuarioByEmail = async (req, res) => {
   }
 };
 
-/**
- * GET /usuarios
- * Obtener todos los usuarios (SOLO ADMIN)
- */
+
 exports.getAllUsuarios = async (req, res) => {
   try {
     const users = await usuariosModel.getAllUsuarios();
     
-    // Eliminar contraseñas de todos los usuarios
     const usuariosSinPassword = users.map(user => {
       const { contrasenia, ...usuarioSinPassword } = user;
       return usuarioSinPassword;
@@ -225,10 +196,7 @@ exports.getAllUsuarios = async (req, res) => {
   }
 };
 
-/**
- * DELETE /usuarios/:id
- * Eliminar usuario (SOLO ADMIN)
- */
+
 exports.deleteUsuario = async (req, res) => {
   console.log('Solicitud recibida en deleteUsuario:', { user: req.user, params: req.params });
   

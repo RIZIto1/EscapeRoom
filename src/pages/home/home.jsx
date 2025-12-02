@@ -1,5 +1,5 @@
 import './home.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
@@ -7,6 +7,8 @@ export default function Home() {
     const [salas, setSalas] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef(null);
     const usuario = JSON.parse(localStorage.getItem('usuario'));
 
     useEffect(() => {
@@ -28,11 +30,25 @@ export default function Home() {
     const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % salas.length);
     const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + salas.length) % salas.length);
 
+
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('usuario');
         navigate('/');
+        setMenuOpen(false);
     };
+
+    // Cerrar menú al hacer clic fuera
+    useEffect(() => {
+        if (!menuOpen) return;
+        function handleClickOutside(event) {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setMenuOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [menuOpen]);
 
     if (loading) {
         return (
@@ -43,15 +59,47 @@ export default function Home() {
         );
     }
 
+
+
     return (
         <div className="home-page">
             <header className="home-header">
                 <div className="header-content">
                     <h1>Club Escape</h1>
-                    <div className="user-info">
-                        <span className="user-name">Hola, <strong>{usuario?.nombre}</strong></span>
-                        {usuario?.rol === 'admin' && <span className="badge-admin">Admin</span>}
-                        <button onClick={handleLogout} className="btn-logout">Cerrar Sesión</button>
+                    <div className="user-info" style={{ position: 'relative' }}>
+                        <span className="user-name">
+                            Hola, <strong>{usuario?.nombre}</strong>
+                        </span>
+                        {usuario?.rol === 'admin' && (
+                            <span className="badge-admin">Admin</span>
+                        )}
+                        <button onClick={handleLogout} className="btn-logout">
+                            Cerrar Sesión
+                        </button>
+                        {/* Botón menú hamburguesa */}
+                        <button className='btn-menu' style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: '10px' }} onClick={() => setMenuOpen((v) => !v)}>
+                            <img className="img-menu" src='/images/menu.png' alt="Menú" style={{ width: '32px', height: '32px' }} />
+                        </button>
+                        {/* Menú desplegable */}
+
+                        {menuOpen && (
+                            <ul className='list-menu' ref={menuRef} style={{position: 'absolute', top: '48px', right: 0, background: '#112117', color: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', borderRadius: '8px', padding: '16px 0', minWidth: '160px', zIndex: 100 }}>
+                                {usuario?.rol === 'admin' && (
+                                    <li style={{ padding: '8px 24px', cursor: 'pointer' }}
+                                        onClick={() => { navigate('/admin'); setMenuOpen(false); }}>
+                                        Panel Admin
+                                    </li>
+                                )}
+                                <li style={{ padding: '8px 24px', cursor: 'pointer' }}
+                                    onClick={() => { navigate('/mis-reservas'); setMenuOpen(false); }}>
+                                    Mis Reservas
+                                </li>
+                                <li style={{ padding: '8px 24px', cursor: 'pointer', color: '#e84a5f' }}
+                                    onClick={handleLogout}>
+                                    Cerrar Sesión
+                                </li>
+                            </ul>
+                        )}
                     </div>
                 </div>
             </header>
@@ -83,14 +131,18 @@ export default function Home() {
 
                 {salas.length > 0 ? (
                     <div className="carousel-container">
-                        <button className="carousel-btn prev" onClick={prevSlide} disabled={salas.length <= 1}>
+                        <button
+                            className="carousel-btn prev"
+                            onClick={prevSlide}
+                            disabled={salas.length <= 1}
+                        >
                             <span className="material-symbols-outlined">chevron_left</span>
                         </button>
 
                         <div className="carousel-content">
                             <div className="sala-card">
                                 <div className="sala-image">
-                                    <img 
+                                    <img
                                         src={`/images/${salas[currentIndex].nombre.replace(/\s+/g, '-').toLowerCase()}.jpg`}
                                         alt={salas[currentIndex].nombre}
                                         onError={(e) => { e.target.src = '/images/no-image.jpg'; }}
@@ -112,9 +164,9 @@ export default function Home() {
                                         </div>
                                         <div className="detail-item">
                                             <span className="material-symbols-outlined">
-                                                {salas[currentIndex].dificultad === 'BAJA' ? 'sentiment_satisfied' : 
-                                                 salas[currentIndex].dificultad === 'MEDIA' ? 'sentiment_neutral' : 
-                                                 'sentiment_very_dissatisfied'}
+                                                {salas[currentIndex].dificultad === 'BAJA' ? 'sentiment_satisfied' :
+                                                    salas[currentIndex].dificultad === 'MEDIA' ? 'sentiment_neutral' :
+                                                        'sentiment_very_dissatisfied'}
                                             </span>
                                             <span>{salas[currentIndex].dificultad}</span>
                                         </div>
@@ -124,13 +176,9 @@ export default function Home() {
                                         </div>
                                     </div>
 
-                                    {/* Horarios de la sala */}
-                                    <div className="sala-horarios">
-                                        <h4>Horarios Disponibles</h4>
-                                        <p>{salas[currentIndex].horarios || 'Consulta disponibilidad al reservar.'}</p>
-                                    </div>
-
-                                    <button className="btn-reservar">Reservar Ahora</button>
+                                    <button className="btn-reservar" onClick={() => navigate(`/inicio/sala/${salas[currentIndex].ID_salas}`)}>
+                                        Reservar Ahora
+                                    </button>
                                 </div>
                             </div>
 
@@ -145,7 +193,11 @@ export default function Home() {
                             </div>
                         </div>
 
-                        <button className="carousel-btn next" onClick={nextSlide} disabled={salas.length <= 1}>
+                        <button
+                            className="carousel-btn next"
+                            onClick={nextSlide}
+                            disabled={salas.length <= 1}
+                        >
                             <span className="material-symbols-outlined">chevron_right</span>
                         </button>
                     </div>
