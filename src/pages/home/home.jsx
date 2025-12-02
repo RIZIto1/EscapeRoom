@@ -15,11 +15,9 @@ export default function Home() {
 
     const cargarSalas = async () => {
         try {
-            // Usar tu endpoint /salas/getall
             const response = await fetch('http://localhost:3000/salas/getall');
             const data = await response.json();
             setSalas(data);
-            console.log('Salas cargadas:', data);
         } catch (error) {
             console.error('Error al cargar salas:', error);
         } finally {
@@ -27,13 +25,8 @@ export default function Home() {
         }
     };
 
-    const nextSlide = () => {
-        setCurrentIndex((prev) => (prev + 1) % salas.length);
-    };
-
-    const prevSlide = () => {
-        setCurrentIndex((prev) => (prev - 1 + salas.length) % salas.length);
-    };
+    const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % salas.length);
+    const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + salas.length) % salas.length);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -52,39 +45,45 @@ export default function Home() {
 
     return (
         <div className="home-page">
-            {/* Header */}
             <header className="home-header">
                 <div className="header-content">
                     <h1>Club Escape</h1>
                     <div className="user-info">
-                        <span className="user-name">
-                            Hola, <strong>{usuario?.nombre}</strong>
-                        </span>
-                        {usuario?.rol === 'admin' && (
-                            <span className="badge-admin">Admin</span>
-                        )}
-                        <button onClick={handleLogout} className="btn-logout">
-                            Cerrar Sesión
-                        </button>
+                        <span className="user-name">Hola, <strong>{usuario?.nombre}</strong></span>
+                        {usuario?.rol === 'admin' && <span className="badge-admin">Admin</span>}
+                        <button onClick={handleLogout} className="btn-logout">Cerrar Sesión</button>
                     </div>
                 </div>
             </header>
 
-            {/* Main Content */}
             <main className="home-main">
                 <div className="intro-section">
                     <h2>Descubre Nuestras Salas</h2>
                     <p>Elige tu aventura y reserva tu experiencia</p>
                 </div>
 
-                {/* Carrusel de Salas */}
+                {/* Información del local */}
+                <section className="info-local">
+                    <h3>Información del Local</h3>
+                    <div className="info-grid">
+                        <div className="info-item">
+                            <span className="material-symbols-outlined">location_on</span>
+                            <p>Avenida Siempre Viva 742, Springfield</p>
+                        </div>
+                        <div className="info-item">
+                            <span className="material-symbols-outlined">schedule</span>
+                            <p>Lunes a Domingo: 14:00 - 23:00</p>
+                        </div>
+                        <div className="info-item">
+                            <span className="material-symbols-outlined">call</span>
+                            <p>+54 11 5555 5555</p>
+                        </div>
+                    </div>
+                </section>
+
                 {salas.length > 0 ? (
                     <div className="carousel-container">
-                        <button 
-                            className="carousel-btn prev" 
-                            onClick={prevSlide}
-                            disabled={salas.length <= 1}
-                        >
+                        <button className="carousel-btn prev" onClick={prevSlide} disabled={salas.length <= 1}>
                             <span className="material-symbols-outlined">chevron_left</span>
                         </button>
 
@@ -94,11 +93,8 @@ export default function Home() {
                                     <img 
                                         src={`/images/${salas[currentIndex].nombre.replace(/\s+/g, '-').toLowerCase()}.jpg`}
                                         alt={salas[currentIndex].nombre}
-                                        onError={(e) => {
-                                            e.target.src = '/images/no-image.jpg';
-                                        }}
+                                        onError={(e) => { e.target.src = '/images/no-image.jpg'; }}
                                     />
-                                    {console.log(`./images/${salas[currentIndex].nombre.replace(/\s+/g, '-').toLowerCase()}.jpg`)}
                                     <div className="sala-overlay">
                                         <h3>{salas[currentIndex].nombre}</h3>
                                     </div>
@@ -128,13 +124,16 @@ export default function Home() {
                                         </div>
                                     </div>
 
-                                    <button className="btn-reservar">
-                                        Reservar Ahora
-                                    </button>
+                                    {/* Horarios de la sala */}
+                                    <div className="sala-horarios">
+                                        <h4>Horarios Disponibles</h4>
+                                        <p>{salas[currentIndex].horarios || 'Consulta disponibilidad al reservar.'}</p>
+                                    </div>
+
+                                    <button className="btn-reservar">Reservar Ahora</button>
                                 </div>
                             </div>
 
-                            {/* Indicadores */}
                             <div className="carousel-indicators">
                                 {salas.map((_, index) => (
                                     <button
@@ -146,11 +145,7 @@ export default function Home() {
                             </div>
                         </div>
 
-                        <button 
-                            className="carousel-btn next" 
-                            onClick={nextSlide}
-                            disabled={salas.length <= 1}
-                        >
+                        <button className="carousel-btn next" onClick={nextSlide} disabled={salas.length <= 1}>
                             <span className="material-symbols-outlined">chevron_right</span>
                         </button>
                     </div>

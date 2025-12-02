@@ -134,11 +134,9 @@ export default function Login() {
                             name="mail"
                             value={form.mail}
                             onChange={handleChange}
-                            placeholder="tu@email.com"
+                            placeholder="Introduce tu correo electrónico"
                             disabled={loading}
                         />
-                        <p>Usuario o Correo Electrónico</p>
-                        <input type="text" placeholder="Introduce tu usuario o correo electrónico"/>
                     </label>
 
                     <label>
@@ -156,10 +154,7 @@ export default function Login() {
                                 className="material-symbols-outlined toggle-password"
                                 onClick={() => setShowPassword(!showPassword)}
                             ></span>
-                            <input type={showPassword ? 'text' : 'password'} placeholder="Introduce tu contraseña"/>
-                            <span className="material-symbols-outlined toggle-password" onClick={() => setShowPassword(!showPassword)}>
-                                {showPassword ? 'visibility_off' : 'visibility'}
-                            </span>
+                            
                         </div>
                     </label>
 
@@ -176,10 +171,7 @@ export default function Login() {
                     <p className="register">
                         ¿No tienes una cuenta? <a href="/registro">Regístrate</a>
                     </p>
-                    <button className="btn-login">Iniciar Sesión</button>
-
-                    <p className="register"> ¿No tienes una cuenta? <a href="#">Regístrate</a></p>
-                </div>
+                    </div>
             </div>
         </div>
     );
