@@ -50,7 +50,7 @@ export default function Login() {
         showLoadingAlert();
 
         try {
-            const response = await fetch('https://escaperoom-backend.onrender.com//usuarios/login', {
+            const response = await fetch('https://escaperoom-backend.onrender.com/usuarios/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form)
