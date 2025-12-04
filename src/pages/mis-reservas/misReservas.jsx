@@ -26,16 +26,16 @@ export default function MisReservas() {
     const cargarReservas = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`http://localhost:3000/reservas/getall/${usuario.id}`);
+            const response = await fetch(`https://escaperoom-backend.onrender.com/reservas/getall/${usuario.id}`);
             const data = await response.json();
             
             const reservasConDetalles = await Promise.all(
                 data.map(async (reserva) => {
-                    const resSala = await fetch('http://localhost:3000/salas/getall');
+                    const resSala = await fetch('https://escaperoom-backend.onrender.com/salas/getall');
                     const salas = await resSala.json();
                     const sala = salas.find(s => s.ID_salas === reserva.FK_ID_salas);
                     
-                    const resHorario = await fetch(`http://localhost:3000/horarios/getHorario/${reserva.FK_ID_horarios}`);
+                    const resHorario = await fetch(`https://escaperoom-backend.onrender.com/horarios/getHorario/${reserva.FK_ID_horarios}`);
                     const horario = await resHorario.json();
                     
                     return {
@@ -78,7 +78,7 @@ export default function MisReservas() {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:3000/reservas/delete/${id}`, {
+                const response = await fetch(`https://escaperoom-backend.onrender.com/reservas/delete/${id}`, {
                     method: 'DELETE'
                 });
 
@@ -129,7 +129,7 @@ export default function MisReservas() {
 
     const guardarEdicion = async (reserva) => {
         try {
-            const response = await fetch(`http://localhost:3000/reservas/update/${reserva.ID_reservas}`, {
+            const response = await fetch(`https://escaperoom-backend.onrender.com/reservas/update/${reserva.ID_reservas}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

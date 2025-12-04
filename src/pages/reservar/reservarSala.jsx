@@ -30,12 +30,12 @@ export default function ReservarSala() {
         try {
             setLoading(true);
             
-            const resSalas = await fetch('http://localhost:3000/salas/getall');
+            const resSalas = await fetch('https://escaperoom-backend.onrender.com/salas/getall');
             const salas = await resSalas.json();
             const salaEncontrada = salas.find(s => s.ID_salas === parseInt(id));
             setSala(salaEncontrada);
 
-            const resHorarios = await fetch(`http://localhost:3000/horarios/sala/${id}`);
+            const resHorarios = await fetch(`https://escaperoom-backend.onrender.com/horarios/sala/${id}`);
             const horariosData = await resHorarios.json();
             setHorarios(horariosData);
 
@@ -56,7 +56,7 @@ export default function ReservarSala() {
 
     const cargarReservas = async () => {
         try {
-            const res = await fetch('http://localhost:3000/reservas/getall');
+            const res = await fetch('https://escaperoom-backend.onrender.com/reservas/getall');
             const todasReservas = await res.json();
             
             const fechaSeleccionada = selectedDate.toISOString().split('T')[0];
@@ -119,7 +119,7 @@ export default function ReservarSala() {
         };
 
         try {
-            const response = await fetch('http://localhost:3000/reservas', {
+            const response = await fetch('https://escaperoom-backend.onrender.com/reservas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(reservaData)

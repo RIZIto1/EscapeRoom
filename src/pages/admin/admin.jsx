@@ -32,7 +32,7 @@ export default function Admin() {
     const cargarSalas = async () => {
         try {
             setLoading(true);
-            const res = await fetch('http://localhost:3000/salas/getall');
+            const res = await fetch('https://escaperoom-backend.onrender.com/salas/getall');
             const data = await res.json();
             setSalas(data);
         } catch (error) {
@@ -111,13 +111,13 @@ export default function Admin() {
 
             let res;
             if (editingId) {
-                res = await fetch(`http://localhost:3000/salas/update/${editingId}`, {
+                res = await fetch(`https://escaperoom-backend.onrender.com/salas/update/${editingId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(salaData)
                 });
             } else {
-                res = await fetch('http://localhost:3000/salas', {
+                res = await fetch('https://escaperoom-backend.onrender.com/salas', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(salaData)
@@ -167,7 +167,7 @@ export default function Admin() {
 
         if (result.isConfirmed) {
             try {
-                const res = await fetch(`http://localhost:3000/salas/delete/${id}`, {
+                const res = await fetch(`https://escaperoom-backend.onrender.com/salas/delete/${id}`, {
                     method: 'DELETE'
                 });
 

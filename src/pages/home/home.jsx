@@ -17,7 +17,7 @@ export default function Home() {
 
     const cargarSalas = async () => {
         try {
-            const response = await fetch('http://localhost:3000/salas/getall');
+            const response = await fetch('https://escaperoom-backend.onrender.com/salas/getall');
             const data = await response.json();
             setSalas(data);
             console.log('Salas cargadas:', data);
