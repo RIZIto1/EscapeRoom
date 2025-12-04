@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
+
 export default function ReservarSala() {
     const { id } = useParams();
     const navigate = useNavigate();
