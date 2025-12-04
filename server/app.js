@@ -12,7 +12,7 @@ const reservasRoutes = require('./routes/reservasRoutes.js');
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:5173', // puerto donde corre tu frontend (React con Vite)
+  origin: true,
   credentials: true,
 }));
 

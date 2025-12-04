@@ -2,6 +2,7 @@ import './admin.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import API_URL from '../config';
 
 export default function Admin() {
     const navigate = useNavigate();
