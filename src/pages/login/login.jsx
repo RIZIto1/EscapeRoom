@@ -151,8 +151,7 @@ export default function Login() {
 
                     <button type="submit" className="btn-login" disabled={loading}>Iniciar Sesión</button>
 
-                    <p className="register"> ¿No tienes una cuenta? <a href="https://escaperoom-backend.onrender.com/registro">Regístrate</a></p>
-                </form>
+<p className="register"> ¿No tienes una cuenta? <span onClick={() => navigate('/registro')} style={{color: '#36e27b', cursor: 'pointer', textDecoration: 'underline'}}>Regístrate</span></p>                </form>
             </div>
         </div>
     );
