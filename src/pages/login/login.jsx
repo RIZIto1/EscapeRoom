@@ -151,7 +151,7 @@ export default function Login() {
 
                     <button type="submit" className="btn-login" disabled={loading}>Iniciar Sesión</button>
 
-                    <p className="register"> ¿No tienes una cuenta? <a href="https://escaperoom-frontend.onrender.com/registro">Regístrate</a></p>
+                    <p className="register"> ¿No tienes una cuenta? <a href="https://escaperoom-backend.onrender.com/registro">Regístrate</a></p>
                 </form>
             </div>
         </div>
