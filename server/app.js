@@ -12,7 +12,7 @@ const reservasRoutes = require('./routes/reservasRoutes.js');
 const app = express();
 
 app.use(cors({
-  origin: ['https://escaperoom-e66n.onrender.com', 'http://localhost:5173'],
+  origin: ['https://escaperoom-frontend.onrender.com', 'http://localhost:5173'],
   credentials: true,
 }));
 
